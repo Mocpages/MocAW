@@ -157,7 +157,7 @@ public class EventHandler
 				if(f.prisoners.contains(p.getDisplayName())) {
 					if(f.prison != null && !p.getEntityData().getBoolean("isPrisoner")) {
 						p.getEntityData().setBoolean("isPrisoner", true);
-						//p.addChatComponentMessage(new ChatComponentText("Yeet"));
+						p.addChatComponentMessage(new ChatComponentText("You have been imprisoned!"));
 						p.setPositionAndUpdate(f.prison.x, f.prison.y, f.prison.z);
 
 					}
