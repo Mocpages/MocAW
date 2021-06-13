@@ -63,6 +63,7 @@ import net.shadowmage.ancientwarfare.core.util.RenderTools;
 import net.shadowmage.ancientwarfare.npc.AncientWarfareNPC;
 import net.shadowmage.ancientwarfare.npc.entity.NpcBase;
 import net.shadowmage.ancientwarfare.npc.gamedata.MocData;
+import net.shadowmage.ancientwarfare.npc.gamedata.MocFaction;
 import net.shadowmage.ancientwarfare.npc.item.AWNpcItemLoader;
 import net.shadowmage.ancientwarfare.npc.item.ItemBuildingSettings;
 import net.shadowmage.ancientwarfare.npc.tile.TileTownHall;
@@ -88,6 +89,7 @@ public class EventHandler
 		}
 
 		ItemStack stack = player.inventory.getCurrentItem();
+
 		Item item;
 		if(stack==null || (item=stack.getItem())==null){
 			return;
@@ -144,17 +146,31 @@ public class EventHandler
 	  RenderTools.adjustBBForPlayerPos(bb, player, delta);
 	  RenderTools.drawOutlinedBoundingBox(bb, 1.f, 1.f, 1.f);
 	  }
-	  @SubscribeEvent
-      public static void onPlayerTick(TickEvent.PlayerTickEvent e){
+	  
+	
+	@SubscribeEvent
+	public static void onPlayerTick(TickEvent.PlayerTickEvent e){
 		EntityPlayer p = e.player;
 		
-	  };
+		if(!p.worldObj.isRemote) {
+			MocData data = AWGameData.INSTANCE.getData(MocData.name,p.getEntityWorld(), MocData.class);
+			for(MocFaction f : data.factions) {
+				if(f.prisoners.contains(p.getDisplayName())) {
+					if(f.prison != null) {
+						p.addChatComponentMessage(new ChatComponentText("Yeet"));
+						p.setPosition(f.prison.x, f.prison.y, f.prison.z);
+					}
+				}
+			}
+		}
+	}
 	
 	private void renderBoundingBox(EntityPlayer player, BlockPosition min, BlockPosition max, float delta, float r, float g, float b)
 	  {
 	  AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x+1, max.y+1, max.z+1);
 	  RenderTools.adjustBBForPlayerPos(bb, player, delta);
 	  RenderTools.drawOutlinedBoundingBox(bb, r, g, b);
+
 	  }
 
 
@@ -440,7 +456,7 @@ public class EventHandler
 	
 	@SubscribeEvent
 	public void tooltipEvent(ItemTooltipEvent evt) {
-		evt.toolTip.add("§cMoc, §fplease fucking §1die");
+		evt.toolTip.add("ï¿½cMoc, ï¿½fplease fucking ï¿½1die");
 	}
 	
 	@SubscribeEvent

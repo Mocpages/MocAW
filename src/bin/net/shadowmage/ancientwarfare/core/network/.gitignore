@@ -1,0 +1,13 @@
+/NetworkHandler.class
+/PacketBase.class
+/PacketBlockEvent.class
+/PacketEntity.class
+/PacketGui.class
+/PacketHandlerClient.class
+/PacketHandlerServer.class
+/PacketItemInteraction.class
+/PacketResearchInit.class
+/PacketResearchStart.class
+/PacketResearchUpdate.class
+/PacketSound.class
+/PacketToggleFT.class

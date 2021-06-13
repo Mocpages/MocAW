@@ -64,6 +64,8 @@ public class AncientWarfareAutomation
 @Instance(value="AncientWarfareAutomation")
 public static AncientWarfareAutomation instance;
 
+
+
 @SidedProxy
 (
 clientSide = "net.shadowmage.ancientwarfare.automation.proxy.ClientProxyAutomation",
