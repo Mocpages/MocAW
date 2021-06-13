@@ -97,8 +97,9 @@ public final int extractEnergy(ForgeDirection from, int maxExtract, boolean simu
 public final int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate)
   {
   if(!canInputTorque(from)){return 0;}
-  if(simulate){return Math.min(maxReceive, (int)(AWAutomationStatics.torqueToRf * getMaxTorqueInput(from)));}
-  return (int)(AWAutomationStatics.torqueToRf * addTorque(from, (double)maxReceive * AWAutomationStatics.rfToTorque));
+  return 0;
+  //if(simulate){return Math.min(maxReceive, (int)(AWAutomationStatics.torqueToRf * getMaxTorqueInput(from)));}
+  //return (int)(AWAutomationStatics.torqueToRf * addTorque(from, (double)maxReceive * AWAutomationStatics.rfToTorque));
   }
 //*************************************** UPGRADE HANDLING METHODS ***************************************//
 
@@ -287,7 +288,8 @@ public final void addEnergyFromPlayer(EntityPlayer player)
 @Override
 public final double addTorque(ForgeDirection from, double energy)
   {
-  return torqueCell.addEnergy(energy);
+	//return 0.0;
+   return torqueCell.addEnergy(energy);
   }
 
 @Override
@@ -377,6 +379,15 @@ public String toString()
   {
   return "Worksite Base["+torqueCell.getEnergy()+"]";
   }
+
+public double getEnergy() {
+	return torqueCell.getEnergy();
+}
+
+
+public void setEnergy(double d) {
+	torqueCell.setEnergy(d);
+}
 
 @Override
 public boolean hasWork()

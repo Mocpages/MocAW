@@ -73,7 +73,7 @@ public static boolean npcAIDebugMode = false;
 public static int npcAttackDamage = 1;//base attack damage for npcs--further multiplied by their equipped weapon
 public static float npcLevelDamageMultiplier = 0.05f;//damage bonus per npc level.  @ level 10 they do 2x the damage as at lvl 0
 public static int npcArcherAttackDamage = 3;//damage for npc archers...can be increased via enchanted weapons
-public static double npcPathfindRange = 60.d;//max pathfind range
+public static double npcPathfindRange = 600.d;//max pathfind range
 
 /************************************************CLIENT SETTINGS*************************************************/
 public static final String clientSettings = "03_client_settings";
@@ -107,7 +107,11 @@ private HashMap<String, HashMap<String, Boolean>> factionVsFactionStandings = ne
 /************************************************NAMES CONFIG*************************************************/
 /************************************************CUSTOM NAME SETTINGS*************************************************/
 
-public static final String[] factionNames = new String[]{"bandit","viking","pirate","desert","native","custom_1","custom_2","custom_3"};
+public static String[] factionNames = new String[] {"bandit","viking","pirate","desert","native","custom_1","custom_2","custom_3", "United_Kingdom", "Prussia", "United_States"};
+//public static String[] factionNames = new String[] {"United_Kingdom", "Prussia", "United_States", "France", "Austria", "Wallachia", "Sweden", "Ottomans", "Russia", "Misc1", "Misc2", "Misc3"};
+
+
+//factionNames.add("bandit"); //  ;
 public static final String[] factionNpcSubtypes = new String[]{"soldier","soldier.elite","cavalry","archer","archer.elite","mounted_archer","leader","leader.elite","priest","trader","civilian.male","civilian.female","bard"};
 
 
@@ -473,6 +477,7 @@ private void initializeCustomHealthValues()
   healthValues.put("trader", healthConfig.get(npcDefaultHealthSettings, "trader", 20).getInt(20));
   healthValues.put("priest", healthConfig.get(npcDefaultHealthSettings, "priest", 20).getInt(20));
   healthValues.put("bard", healthConfig.get(npcDefaultHealthSettings, "bard", 20).getInt(20));
+  healthValues.put("capitalist", healthConfig.get(npcDefaultHealthSettings, "capitalist", 20).getInt(20));
   }
 
 public int getMaxHealthFor(String type)

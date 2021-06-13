@@ -39,6 +39,7 @@ public static final int PACKET_STRUCTURE_REMOVE = 11;
 public static final int PACKET_NPC_COMMAND = 12;
 public static final int PACKET_FACTION_UPDATE = 13;
 public static final int PACKET_BLOCK_EVENT = 14;
+public static final int PACKET_FT = 110;
 
 public static final int GUI_CRAFTING = 0;
 public static final int GUI_SCANNER = 1;
@@ -90,6 +91,8 @@ public static final int GUI_WORKSITE_BOUNDS = 46;
 public static final int GUI_NPC_PLAYER_OWNED_TRADE = 47;
 public static final int GUI_SOUND_BLOCK = 48;
 public static final int GUI_NPC_FACTION_BARD = 49;
+public static final int GUI_CREATIVE_CONTROLS = 50;
+public static final int GUI_SETUP_BUILDING = 51;
 
 private FMLEventChannel channel;
 
@@ -108,6 +111,7 @@ public final void registerNetwork()
   PacketBase.registerPacketType(PACKET_RESEARCH_ADD, PacketResearchUpdate.class);
   PacketBase.registerPacketType(PACKET_RESEARCH_START, PacketResearchStart.class);
   PacketBase.registerPacketType(PACKET_BLOCK_EVENT, PacketBlockEvent.class);
+  PacketBase.registerPacketType(PACKET_FT, PacketToggleFT.class);
   NetworkRegistry.INSTANCE.registerGuiHandler(AncientWarfareCore.instance, this);
   }
 

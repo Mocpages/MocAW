@@ -1,5 +1,6 @@
 package net.shadowmage.ancientwarfare.core;
 
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.shadowmage.ancientwarfare.core.block.AWCoreBlockLoader;
@@ -19,6 +20,9 @@ import net.shadowmage.ancientwarfare.core.proxy.CommonProxyBase;
 import net.shadowmage.ancientwarfare.core.research.ResearchData;
 import net.shadowmage.ancientwarfare.core.research.ResearchGoal;
 import net.shadowmage.ancientwarfare.core.research.ResearchTracker;
+
+import java.util.EnumSet;
+
 import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -30,6 +34,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 
 @Mod
 (
@@ -57,7 +62,7 @@ serverSide = "net.shadowmage.ancientwarfare.core.proxy.CommonProxy"
 public static CommonProxyBase proxy;
 
 public static Configuration config;
-
+//public static WorldTypeEarth worldType;
 public static org.apache.logging.log4j.Logger log;
 
 @EventHandler
@@ -81,7 +86,10 @@ public void preInit(FMLPreInitializationEvent evt)
   MinecraftForge.EVENT_BUS.register(new ItemEventHandler());
   FMLCommonHandler.instance().bus().register(ResearchTracker.instance());
   FMLCommonHandler.instance().bus().register(this);
-   
+ // worldType = new WorldTypeEarth("earth");
+  //DimensionManager.registerProviderType(102, lotr.common.world.LOTRWorldProviderMiddleEarth.class, true);
+  //DimensionManager.registerDimension(102, 102);
+  //earth = new LOTRDimension("MiddleEarth", 100, lotr.common.world.LOTRWorldProviderMiddleEarth.class, true, 100, EnumSet.of(DimensionRegion.WEST, DimensionRegion.EAST, DimensionRegion.SOUTH));
   /**
    * register blocks, items, tile entities, and entities
    */

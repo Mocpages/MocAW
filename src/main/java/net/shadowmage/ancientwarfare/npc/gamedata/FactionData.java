@@ -1,6 +1,8 @@
 package net.shadowmage.ancientwarfare.npc.gamedata;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;

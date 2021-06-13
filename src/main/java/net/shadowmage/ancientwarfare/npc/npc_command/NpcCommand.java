@@ -7,14 +7,18 @@ import java.util.UUID;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 import net.shadowmage.ancientwarfare.core.network.NetworkHandler;
 import net.shadowmage.ancientwarfare.core.util.WorldTools;
 import net.shadowmage.ancientwarfare.npc.entity.NpcBase;
+import net.shadowmage.ancientwarfare.npc.entity.NpcCombat;
 import net.shadowmage.ancientwarfare.npc.item.ItemCommandBaton;
 import net.shadowmage.ancientwarfare.npc.network.PacketNpcCommand;
+import net.shadowmage.ancientwarfare.npc.npc_command.NpcCommand.Command;
+import net.shadowmage.ancientwarfare.npc.npc_command.NpcCommand.CommandType;
 
 public class NpcCommand
 {
@@ -67,16 +71,76 @@ public static void handleServerCommand(EntityPlayer player, CommandType type, bo
     {
     cmd = new Command(type, x);
     }
-  List<Entity> targets = new ArrayList<Entity>();
+  List<NpcBase> targets = new ArrayList<NpcBase>();
   ItemCommandBaton.getCommandedEntities(player.worldObj, player.getCurrentEquippedItem(), targets);
-  for(Entity e : targets)
-    {
-    if(e instanceof NpcBase)
-      {
-      ((NpcBase)e).handlePlayerCommand(cmd);
-      }
-    }
+  
+  double angle = getAngle(player.posX, x, player.posZ, z);
+  //y = player.worldObj.getTopSolidOrLiquidBlock((int)x, (int)z);
+  targets.get(0).handlePlayerCommand(new Command(CommandType.ATTACK_AREA, x, y, z));
+  NpcBase npc = targets.get(0);
+  double[] lookPos = NpcCommand.getRelOffset(npc.posX, npc.posZ, angle, npc.xOff + 100, npc.zOff);
+  npc.getLookHelper().setLookPosition(lookPos[0], npc.posY + npc.getEyeHeight(), lookPos[1], npc.getVerticalFaceSpeed(), npc.getVerticalFaceSpeed());
+
+  handleFormation(npc, targets,angle, 2, 0);
+  
   }
+
+public static void handleFormation(NpcBase leader, List<NpcBase> targets, double angle, int files, double zOffset) { //Files are actually ranks, idk why
+	if(targets.size() <= files) { //we only need one rank!
+		handleRow(leader, targets,angle, 0);
+	}else {
+		//NpcBase guide = targets.get(0);
+		handleRow(leader, targets.subList(0, files),angle, zOffset); //handle this rank
+		targets = targets.subList(files, targets.size()); //get all the remaining ranks
+		
+		//set guide for next rank
+		if(targets.size() == 0) { return;}
+		NpcBase rowLead = targets.get(0);
+		rowLead.setFollowingEntity(leader);
+		rowLead.xOff = 0;
+		rowLead.zOff = zOffset -1.25;
+		rowLead.angle = angle;
+		handleFormation(leader, targets, angle, files, zOffset -1.25);
+	}
+}
+
+public static void handleRow(NpcBase leader, List<NpcBase> targets, double angle, double zOffset) {
+	int i = 1;
+	for(NpcBase n : targets) {
+		if(n != leader) {
+			//System.out.println("Updating NPC");
+			//n.setAIMoveSpeed(guide.getAIMoveSpeed() * 2);
+			n.rotationYaw = (float) angle;
+			n.setFollowingEntity(leader);
+			n.xOff = -1.25 * i;
+			n.zOff = zOffset;
+			n.angle = angle;
+			i++;
+		}
+	}
+}
+	
+	
+
+public static double[] getRelOffset(double x, double z, double angle, double offX, double offZ) {
+	double xPrime = x * Math.cos(angle) + z * Math.sin(angle);
+	double zPrime = -x  * Math.sin(angle) + z * Math.cos(angle);
+	
+	zPrime += offZ;
+	xPrime += offX;
+
+	double x2 = xPrime * Math.cos(angle) - zPrime * Math.sin(angle);
+	double z2 = xPrime  * Math.sin(angle) + zPrime * Math.cos(angle);
+	
+	return new double[] {x2,z2};
+}
+
+public static double getAngle(double x1, double x2, double z1, double z2) {
+	double cx = (x1 + x2) / 2;
+	double cz = (z1 + z2) / 2;
+	double angle = Math.atan2(z2 - cz, x2 - cx);
+	return angle;
+}
 
 public static final class Command
 {

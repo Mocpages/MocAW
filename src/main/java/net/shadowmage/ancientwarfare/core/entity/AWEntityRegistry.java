@@ -14,6 +14,7 @@ public static final String NPC_COURIER = "aw_npc_courier";
 public static final String NPC_TRADER = "aw_npc_trader";
 public static final String NPC_PRIEST = "aw_npc_priest";
 public static final String NPC_BARD = "aw_npc_bard";
+public static final String NPC_CAPITALIST = "aw_npc_capitalist";
 
 public static final String NPC_FACTION_BANDIT_ARCHER = "bandit.archer";
 public static final String NPC_FACTION_BANDIT_SOLDIER = "bandit.soldier";

@@ -16,6 +16,7 @@ itemGroup.tabs.structures=Ancient Warfare Structures
 itemGroup.tabs.editor=Ancient Warfare Model Editor
 itemGroup.tabs.automation=Ancient Warfare Automation
 itemGroup.tabs.npc=Ancient Warfare Npcs
+
 #core
 item.research_book.name=Research Book
 item.wooden_hammer.name=Wooden Hammer
@@ -34,6 +35,7 @@ item.backpack.1.name=Travel Pack
 item.backpack.2.name=Medium Pack
 item.backpack.3.name=Large Pack
 item.steel_ingot.name=Steel Ingot
+item.dossier.name=Dossier
 #component (shared)
 item.component.0.name=Wooden Gear Set
 item.component.1.name=Iron Gear Set

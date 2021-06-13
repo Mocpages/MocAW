@@ -46,6 +46,8 @@ public abstract class NpcBase extends EntityCreature implements IEntityAdditiona
 private String ownerName = "";//the owner of this NPC, used for checking teams
 
 protected String followingPlayerName;//set/cleared onInteract from player if player.team==this.team
+protected EntityLivingBase followingEntity;
+public int renderMode = 0;
 
 protected NpcLevelingStats levelingStats;
 
@@ -66,6 +68,11 @@ private int attackDamage = -1;//faction based only
 private int armorValue = -1;//faction based only
 private int maxHealthOverride = -1;
 private String customTexRef = "";//might as well allow for player-owned as well...
+
+public double xOff;
+public double zOff;
+public double angle;
+public double speed = 1.0d;
 
 public NpcBase(World par1World)
   {
@@ -791,15 +798,20 @@ public abstract boolean canBeAttackedBy(Entity e);
 
 public final EntityLivingBase getFollowingEntity()
   {
+  if(followingEntity != null) {
+	  return followingEntity;
+  }
   if(followingPlayerName==null){return null;}
   return worldObj.getPlayerEntityByName(followingPlayerName);
   }
 
 public final void setFollowingEntity(EntityLivingBase entity)
   {
-  if(entity instanceof EntityPlayer && canBeCommandedBy(entity.getCommandSenderName()))
-    {
+  if(entity instanceof EntityPlayer && canBeCommandedBy(entity.getCommandSenderName())){
     this.followingPlayerName = entity.getCommandSenderName();        
+    }else if(entity instanceof NpcBase && this.isOnSameTeam(entity)) {
+    	this.followingEntity = entity;
+    	System.out.println("set entity");
     }
   }
 

@@ -154,14 +154,12 @@ public void writeToNBT(NBTTagCompound tag)
 public NBTTagCompound getDescriptionPacketTag(NBTTagCompound tag)
   {
   super.getDescriptionPacketTag(tag);
-  if(bbMin!=null)
-    {
+  if(bbMin!=null){
     NBTTagCompound innerTag = new NBTTagCompound();
     bbMin.writeToNBT(innerTag);
     tag.setTag("bbMin", innerTag);
     }
-  if(bbMax!=null)
-    {
+  if(bbMax!=null){
     NBTTagCompound innerTag = new NBTTagCompound();
     bbMax.writeToNBT(innerTag);
     tag.setTag("bbMax", innerTag);
@@ -170,17 +168,14 @@ public NBTTagCompound getDescriptionPacketTag(NBTTagCompound tag)
   }
 
 @Override
-public final void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
-  {
+public final void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt){
   super.onDataPacket(net, pkt);
   NBTTagCompound tag = pkt.func_148857_g();
-  if(tag.hasKey("bbMin"))
-    {
+  if(tag.hasKey("bbMin")){
     bbMin = new BlockPosition();
     bbMin.read(tag.getCompoundTag("bbMin"));
     }
-  if(tag.hasKey("bbMax"))
-    {
+  if(tag.hasKey("bbMax")){
     bbMax = new BlockPosition();
     bbMax.read(tag.getCompoundTag("bbMax"));
     }

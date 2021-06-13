@@ -20,12 +20,13 @@ public static final AWGameData INSTANCE = new AWGameData();
 private HashMap<String, Class <? extends WorldSavedData>> dataClasses = new HashMap<String, Class <? extends WorldSavedData>>();
 
 @SubscribeEvent
-public void onWorldLoad(WorldEvent.Load evt)
-  {
+public void onWorldLoad(WorldEvent.Load evt){
+	System.out.println("LOADING");
   World world = evt.world;
   if(world.isRemote){return;}
   for(String name : dataClasses.keySet())
     {
+	  System.out.println("Loading: " + name);
     world.mapStorage.loadData(dataClasses.get(name), name);
     }
   }

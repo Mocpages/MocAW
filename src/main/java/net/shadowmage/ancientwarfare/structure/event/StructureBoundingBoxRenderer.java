@@ -73,7 +73,7 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
   if(item==AWStructuresItemLoader.scanner)
     {
     renderScannerBoundingBox(player, stack, evt.partialTicks);
-    }  
+    }
   else if(item==AWStructuresItemLoader.builder)
     {
     renderBuildBoundingBox(player, stack, evt.partialTicks);

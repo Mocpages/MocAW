@@ -4,15 +4,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.shadowmage.ancientwarfare.core.api.AWItems;
 import net.shadowmage.ancientwarfare.core.item.ItemComponent;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class AWNpcItemLoader
 {
@@ -52,11 +52,30 @@ public static final ItemShield stoneShield = new ItemShield("stone_shield", Tool
 public static final ItemShield ironShield = new ItemShield("iron_shield", ToolMaterial.IRON);
 public static final ItemShield goldShield = new ItemShield("gold_shield", ToolMaterial.GOLD);
 public static final ItemShield diamondShield = new ItemShield("diamond_shield", ToolMaterial.EMERALD);
+public static final ItemBuildingScanner scanner = new ItemBuildingScanner("structure_scanner");
+public static final ItemCannedFood food = new ItemCannedFood("cannedfood");
+public static final ItemDossier dossier = new ItemDossier("dossier");
+public static final ItemPapers papers = new ItemPapers("papers");
+public static final ItemCocaine cocaine = new ItemCocaine("cocaine");
+public static final ItemMoney money = new ItemMoney("money");
+public static final ItemRadio radio = new ItemRadio("radio");
 
+
+
+public static final ItemBlueprint blueprint_test = new ItemBlueprint("test", "plane");
 private static final TabSorter sorter = new TabSorter();
   
-public static void load()
-  {
+public static void load(){
+	
+	GameRegistry.registerItem(scanner, "structure_scanner");
+	GameRegistry.registerItem(food, "cannedFood");
+	GameRegistry.registerItem(dossier, "dossier");
+	GameRegistry.registerItem(papers, "papers");
+	GameRegistry.registerItem(cocaine, "cocaine");
+	GameRegistry.registerItem(money, "money");
+	GameRegistry.registerItem(radio, "radio");
+
+	
   GameRegistry.registerItem(npcSpawner, "npc_spawner");  
   GameRegistry.registerItem(workOrder, "work_order");
   GameRegistry.registerItem(upkeepOrder, "upkeep_order");
@@ -75,6 +94,10 @@ public static void load()
   GameRegistry.registerItem(ironShield, "iron_shield");
   GameRegistry.registerItem(goldShield, "gold_shield");
   GameRegistry.registerItem(diamondShield, "diamond_shield");
+  
+  GameRegistry.registerItem(blueprint_test, "test");
+
+  
   
   ((ItemComponent)AWItems.componentItem).addSubItem(ItemComponent.NPC_FOOD_BUNDLE, "ancientwarfare:npc/food_bundle");  
   }

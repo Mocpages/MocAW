@@ -8,6 +8,11 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import cpw.mods.fml.client.config.DummyConfigElement.DummyCategoryElement;
+import cpw.mods.fml.client.config.IConfigElement;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -28,6 +33,7 @@ import net.shadowmage.ancientwarfare.npc.gui.GuiNpcFactionTradeView;
 import net.shadowmage.ancientwarfare.npc.gui.GuiNpcInventory;
 import net.shadowmage.ancientwarfare.npc.gui.GuiNpcPlayerOwnedTrade;
 import net.shadowmage.ancientwarfare.npc.gui.GuiRoutingOrder;
+import net.shadowmage.ancientwarfare.npc.gui.GuiSetupBuilding;
 import net.shadowmage.ancientwarfare.npc.gui.GuiTownHallInventory;
 import net.shadowmage.ancientwarfare.npc.gui.GuiTradeOrder;
 import net.shadowmage.ancientwarfare.npc.gui.GuiUpkeepOrder;
@@ -36,12 +42,10 @@ import net.shadowmage.ancientwarfare.npc.item.AWNpcItemLoader;
 import net.shadowmage.ancientwarfare.npc.render.RenderCommandOverlay;
 import net.shadowmage.ancientwarfare.npc.render.RenderNpcBase;
 import net.shadowmage.ancientwarfare.npc.render.RenderShield;
+import net.shadowmage.ancientwarfare.npc.render.RenderTileBuilding;
 import net.shadowmage.ancientwarfare.npc.render.RenderWorkLines;
 import net.shadowmage.ancientwarfare.npc.skin.NpcSkinManager;
-import cpw.mods.fml.client.config.DummyConfigElement.DummyCategoryElement;
-import cpw.mods.fml.client.config.IConfigElement;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.shadowmage.ancientwarfare.npc.tile.TileBuilding;
 
 public class NpcClientProxy extends NpcCommonProxy
 {
@@ -62,7 +66,8 @@ public void registerClient()
   NetworkHandler.registerGui(NetworkHandler.GUI_NPC_TRADE_ORDER, GuiTradeOrder.class);
   NetworkHandler.registerGui(NetworkHandler.GUI_NPC_PLAYER_OWNED_TRADE, GuiNpcPlayerOwnedTrade.class);
   NetworkHandler.registerGui(NetworkHandler.GUI_NPC_FACTION_BARD, GuiNpcFactionBard.class);
-  
+  NetworkHandler.registerGui(NetworkHandler.GUI_SETUP_BUILDING, GuiSetupBuilding.class);
+
   RenderingRegistry.registerEntityRenderingHandler(NpcBase.class, new RenderNpcBase());
   
   MinecraftForge.EVENT_BUS.register(RenderWorkLines.INSTANCE);//register render for orders items routes/block highlights
@@ -75,6 +80,9 @@ public void registerClient()
   MinecraftForgeClient.registerItemRenderer(AWNpcItemLoader.ironShield, shieldRender);
   MinecraftForgeClient.registerItemRenderer(AWNpcItemLoader.goldShield, shieldRender);
   MinecraftForgeClient.registerItemRenderer(AWNpcItemLoader.diamondShield, shieldRender);
+  
+  ClientRegistry.bindTileEntitySpecialRenderer(TileBuilding.class, new RenderTileBuilding());
+
   
   registerClientOptions();
   }

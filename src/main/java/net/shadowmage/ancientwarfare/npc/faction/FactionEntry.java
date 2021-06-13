@@ -1,12 +1,16 @@
 package net.shadowmage.ancientwarfare.npc.faction;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.shadowmage.ancientwarfare.core.gamedata.AWGameData;
 import net.shadowmage.ancientwarfare.npc.AncientWarfareNPC;
 import net.shadowmage.ancientwarfare.npc.config.AWNPCStatics;
+import net.shadowmage.ancientwarfare.npc.gamedata.FactionData;
 
 public final class FactionEntry
 {

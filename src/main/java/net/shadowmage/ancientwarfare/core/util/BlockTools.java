@@ -139,8 +139,14 @@ public static BlockPosition getAverageOf(BlockPosition ... positions)
  * @param offset
  * @return
  */
+
+
+public static BlockPosition getBlockClickedOn(EntityPlayer player, World world, boolean offset) {
+	return getBlockClickedOn(player, world, offset, 5.0D);
+}
+
 @SuppressWarnings("rawtypes")
-public static BlockPosition getBlockClickedOn(EntityPlayer player, World world, boolean offset)
+public static BlockPosition getBlockClickedOn(EntityPlayer player, World world, boolean offset, double reachLength)
   {
   float scaleFactor = 1.0F;
   float rotPitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * scaleFactor;
@@ -155,7 +161,6 @@ public static BlockPosition getBlockClickedOn(EntityPlayer player, World world, 
   float vectorY = MathHelper.sin(-rotPitch * 0.017453292F);
   float vectorX = var15 * var16;
   float vectorZ = var14 * var16;
-  double reachLength = 5.0D;
   Vec3 testVectorFar = testVector.addVector(vectorX * reachLength, vectorY * reachLength, vectorZ * reachLength);
   MovingObjectPosition testHitPosition = world.rayTraceBlocks(testVector, testVectorFar, true);
 

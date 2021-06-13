@@ -6,6 +6,7 @@ import net.shadowmage.ancientwarfare.automation.block.AWAutomationBlockLoader;
 import net.shadowmage.ancientwarfare.automation.chunkloader.AWChunkLoader;
 import net.shadowmage.ancientwarfare.automation.config.AWAutomationStatics;
 import net.shadowmage.ancientwarfare.automation.container.ContainerChunkLoaderDeluxe;
+import net.shadowmage.ancientwarfare.automation.container.ContainerCreative;
 import net.shadowmage.ancientwarfare.automation.container.ContainerMailbox;
 import net.shadowmage.ancientwarfare.automation.container.ContainerTorqueGeneratorSterling;
 import net.shadowmage.ancientwarfare.automation.container.ContainerWarehouseControl;
@@ -139,6 +140,8 @@ public void preInit(FMLPreInitializationEvent evt)
   NetworkHandler.registerContainer(NetworkHandler.GUI_CHUNK_LOADER_DELUXE, ContainerChunkLoaderDeluxe.class);
   NetworkHandler.registerContainer(NetworkHandler.GUI_WAREHOUSE_STOCK, ContainerWarehouseStockViewer.class);
   NetworkHandler.registerContainer(NetworkHandler.GUI_WORKSITE_BOUNDS, ContainerWorksiteBoundsAdjust.class);
+  NetworkHandler.registerContainer(NetworkHandler.GUI_CREATIVE_CONTROLS, ContainerCreative.class);
+
   /**
    * register persistent game-data handlers
    */

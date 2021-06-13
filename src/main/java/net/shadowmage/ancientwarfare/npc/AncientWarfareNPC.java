@@ -1,7 +1,25 @@
 package net.shadowmage.ancientwarfare.npc;
 
+import java.util.List;
+
+import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import mcheli.weapon.MCH_EntityBullet;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.world.WorldEvent;
 import net.shadowmage.ancientwarfare.core.AncientWarfareCore;
@@ -15,7 +33,9 @@ import net.shadowmage.ancientwarfare.core.network.PacketBase;
 import net.shadowmage.ancientwarfare.npc.block.AWNPCBlockLoader;
 import net.shadowmage.ancientwarfare.npc.command.CommandDebugAI;
 import net.shadowmage.ancientwarfare.npc.command.CommandFaction;
+import net.shadowmage.ancientwarfare.npc.command.CommandSquad;
 import net.shadowmage.ancientwarfare.npc.config.AWNPCStatics;
+import net.shadowmage.ancientwarfare.npc.container.ContainerBuildingSetup;
 import net.shadowmage.ancientwarfare.npc.container.ContainerCombatOrder;
 import net.shadowmage.ancientwarfare.npc.container.ContainerNpcBard;
 import net.shadowmage.ancientwarfare.npc.container.ContainerNpcCreativeControls;
@@ -31,23 +51,14 @@ import net.shadowmage.ancientwarfare.npc.container.ContainerUpkeepOrder;
 import net.shadowmage.ancientwarfare.npc.container.ContainerWorkOrder;
 import net.shadowmage.ancientwarfare.npc.crafting.AWNpcCrafting;
 import net.shadowmage.ancientwarfare.npc.entity.AWNPCEntityLoader;
+import net.shadowmage.ancientwarfare.npc.entity.faction.NpcFactionPilot;
 import net.shadowmage.ancientwarfare.npc.faction.FactionTracker;
 import net.shadowmage.ancientwarfare.npc.gamedata.FactionData;
+import net.shadowmage.ancientwarfare.npc.gamedata.MocData;
 import net.shadowmage.ancientwarfare.npc.item.AWNpcItemLoader;
 import net.shadowmage.ancientwarfare.npc.network.PacketFactionUpdate;
 import net.shadowmage.ancientwarfare.npc.network.PacketNpcCommand;
 import net.shadowmage.ancientwarfare.npc.proxy.NpcCommonProxy;
-import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 @Mod
 (
@@ -95,7 +106,7 @@ public void preInit(FMLPreInitializationEvent evt)
   FMLCommonHandler.instance().bus().register(FactionTracker.INSTANCE);
   FMLCommonHandler.instance().bus().register(this);
   MinecraftForge.EVENT_BUS.register(net.shadowmage.ancientwarfare.npc.event.EventHandler.INSTANCE);
-  
+  FMLCommonHandler.instance().bus().register(net.shadowmage.ancientwarfare.npc.event.EventHandler.INSTANCE);
   /**
    * load items, blocks, and entities
    */
@@ -119,6 +130,7 @@ public void preInit(FMLPreInitializationEvent evt)
   NetworkHandler.registerContainer(NetworkHandler.GUI_NPC_TRADE_ORDER, ContainerTradeOrder.class);
   NetworkHandler.registerContainer(NetworkHandler.GUI_NPC_PLAYER_OWNED_TRADE, ContainerNpcPlayerOwnedTrade.class);
   NetworkHandler.registerContainer(NetworkHandler.GUI_NPC_FACTION_BARD, ContainerNpcFactionBard.class);
+  NetworkHandler.registerContainer(NetworkHandler.GUI_SETUP_BUILDING, ContainerBuildingSetup.class);
   PacketBase.registerPacketType(NetworkHandler.PACKET_NPC_COMMAND, PacketNpcCommand.class);
   PacketBase.registerPacketType(NetworkHandler.PACKET_FACTION_UPDATE, PacketFactionUpdate.class);
   
@@ -126,9 +138,23 @@ public void preInit(FMLPreInitializationEvent evt)
    * register persistent game-data handlers
    */
   AWGameData.INSTANCE.registerSaveData(FactionData.name, FactionData.class);
+  AWGameData.INSTANCE.registerSaveData(MocData.name, MocData.class);
   /**
    * register tick-handlers
    */
+  
+  ForgeChunkManager.setForcedChunkLoadingCallback(this, new LoadingCallback() {
+
+		@Override
+		public void ticketsLoaded(List<Ticket> tickets, World world) {
+			for(Ticket ticket : tickets) {
+				if(ticket.getEntity() instanceof NpcFactionPilot) {
+					((NpcFactionPilot)ticket.getEntity()).init(ticket);
+				}
+			}
+		}
+	});
+  
   AWLog.log("Ancient Warfare NPCs Pre-Init completed");
   }
 
@@ -172,6 +198,8 @@ public void serverStart(FMLServerStartingEvent evt)
   {
   evt.registerServerCommand(new CommandFaction());  
   evt.registerServerCommand(new CommandDebugAI());
+  evt.registerServerCommand(new CommandSquad());
+
   }
 
 @SubscribeEvent

@@ -1,11 +1,14 @@
 package net.shadowmage.ancientwarfare.npc.entity;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -15,12 +18,19 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.shadowmage.ancientwarfare.core.config.AWLog;
+import net.shadowmage.ancientwarfare.core.gamedata.AWGameData;
+import net.shadowmage.ancientwarfare.core.inventory.InventoryBackpack;
 import net.shadowmage.ancientwarfare.core.network.NetworkHandler;
 import net.shadowmage.ancientwarfare.core.util.BlockPosition;
 import net.shadowmage.ancientwarfare.npc.AncientWarfareNPC;
 import net.shadowmage.ancientwarfare.npc.ai.owned.NpcAIPlayerOwnedRideHorse;
 import net.shadowmage.ancientwarfare.npc.config.AWNPCStatics;
+import net.shadowmage.ancientwarfare.npc.economy.BankAccount;
 import net.shadowmage.ancientwarfare.npc.entity.faction.NpcFaction;
+import net.shadowmage.ancientwarfare.npc.gamedata.MocData;
+import net.shadowmage.ancientwarfare.npc.gamedata.MocFaction;
+import net.shadowmage.ancientwarfare.npc.item.AWNpcItemLoader;
+import net.shadowmage.ancientwarfare.npc.item.ItemCocaine;
 import net.shadowmage.ancientwarfare.npc.item.ItemCommandBaton;
 import net.shadowmage.ancientwarfare.npc.npc_command.NpcCommand.Command;
 import net.shadowmage.ancientwarfare.npc.npc_command.NpcCommand.CommandType;
@@ -34,12 +44,20 @@ private Command playerIssuedCommand;//TODO load/save
 private int foodValueRemaining = 0;
 
 protected NpcAIPlayerOwnedRideHorse horseAI;
+public double money = 100.0;
+public double pocketMoney = 0.0;
 
 private BlockPosition townHallPosition;
 private BlockPosition upkeepAutoBlock;
+public double militancy = 0;
+public double consciousness = 0;
+public double literacy = 0;
 
-public NpcPlayerOwned(World par1World)
-  {
+public int cocaineTimer = 0;
+
+public InventoryBackpack inventory = new InventoryBackpack(27);
+
+public NpcPlayerOwned(World par1World){
   super(par1World);
   }
 
@@ -68,6 +86,60 @@ public void onDeath(DamageSource source)
     }  
   super.onDeath(source);  
   }
+public MocFaction getFac() {
+	  return ((MocData)AWGameData.INSTANCE.getPerWorldData(MocData.name,worldObj, MocData.class)).getFaction(this.getTeam().getRegisteredName());
+}
+
+public double getBudget(BankAccount acct) {
+	double budget = pocketMoney; //This is our total income for the round.
+	MocFaction fac = getFac();
+	double goalSavings = fac.nationalBank.getInterest() * 100 * pocketMoney; //So if interest is 1% = 0.01, goal savings are one month's income, etc.
+	double actualSavings = acct.getBalance();
+	
+	if(goalSavings < actualSavings) { //We have less than our goal savings
+		budget *= 0.5; //Spend half of our money, save half.
+		pocketMoney -= budget;
+		acct.deposit(pocketMoney);
+	}else if(goalSavings > actualSavings) {//We have surplus savings
+		double surplus = actualSavings - goalSavings; //How much extra money we have in the bank.
+		surplus *= 0.2; //Only spend 20% of it at once.
+		surplus = acct.withdraw(surplus);
+		budget += surplus;
+	}else {//We have exactly the right amount of savings
+		//We don't actually need to do anything here.
+	}
+	return budget;
+}
+
+public void buySubsistenceNeeds(MocFaction fac, BankAccount acct) {
+	double price = fac.itemMarket.getPrice(Items.bread);
+	if(price < 0) {return;} //A negative price means that there is no food for sale
+	if(price < this.pocketMoney) { //We can afford food without resorting to savings
+		pocketMoney -= price;
+		if(fac.itemMarket.buy(Items.bread, price)) {
+			//We have bought our bread
+		}
+	}else { //We need to dip into our savings
+		double amtToWithdraw = price - pocketMoney; //How much we need to withdraw from bank to buy food
+		if(amtToWithdraw > acct.getBalance()) { //We can't afford bread, even WITH our savings!
+			
+		}else {
+			amtToWithdraw = acct.withdraw(amtToWithdraw);
+			if(amtToWithdraw + pocketMoney >= price) { //Final check in case bank ran out of capital
+				if(fac.itemMarket.buy(Items.bread, price)) {
+					//We have bought our bread
+				}
+			}
+		}
+	}
+}
+
+public void buyNeeds() {
+	//MocFaction fac = getFac();
+	//BankAccount acct = fac.nationalBank.getAccountForNPC(this);
+	//buySubsistenceNeeds(fac, acct);
+	//double budget = getBudget(acct);
+}
 
 @Override
 public int getArmorValueOverride()
@@ -136,6 +208,8 @@ public void handleTownHallBroadcast(TileTownHall tile, BlockPosition position)
       }
     }
   }
+
+
 
 private boolean validateTownHallPosition()
   {
@@ -264,9 +338,10 @@ protected boolean isHostileTowards(Team team)
   }
 
 @Override
-public void onWeaponInventoryChanged()
-  {
+public void onWeaponInventoryChanged(){
   updateTexture();
+  
+
   }
 
 @Override
@@ -338,11 +413,20 @@ public boolean requiresUpkeep()
   }
 
 @Override
-protected boolean interact(EntityPlayer player)
-  {
+protected boolean interact(EntityPlayer player){
   if(player.worldObj.isRemote){return false;}
   Team t = player.getTeam();
   Team t1 = getTeam();
+  
+  if(player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemCocaine && cocaineTimer <= 0) {
+	  player.getHeldItem().stackSize --;
+	  EntityItem ei = new EntityItem(player.worldObj, player.posX, player.posY, player.posZ, new ItemStack(AWNpcItemLoader.money));
+	  player.worldObj.spawnEntityInWorld(ei);
+
+	  cocaineTimer = 20 * 60 * 25; // 25 minutes
+	  return true;
+  }
+  
   boolean baton = player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem() instanceof ItemCommandBaton;
   if(t==t1 && this.canBeCommandedBy(player.getCommandSenderName()) && !baton)
     {
@@ -425,13 +509,38 @@ public void openGUI(EntityPlayer player)
   {
   NetworkHandler.INSTANCE.openGui(player, NetworkHandler.GUI_NPC_INVENTORY, getEntityId(), 0, 0);  
   }
+private static DecimalFormat df = new DecimalFormat("0.00");
 
 @Override
 public void onLivingUpdate()
   {  
   super.onLivingUpdate();
+
+/*  if(ordersStack != null) {
+	  NBTTagCompound a = this.ordersStack.getTagCompound();
+	  if(a == null) { a = new NBTTagCompound();}
+	  if(!a.hasKey("Mocc")) {
+		  a.setString("Mocc", "KYS");
+	  }
+	  ordersStack.setTagCompound(a);*/
+  //}
+  
+	/*
+	 * if(worldObj.getWorldTime() % 40 == 0) { literacy -= 0.00001; try { MocFaction
+	 * f = ((MocData)AWGameData.INSTANCE.getPerWorldData(MocData.name,worldObj,
+	 * MocData.class)).getFaction(this.getTeam().getRegisteredName());
+	 * f.addNpc(this);
+	 * 
+	 * }catch(Exception e) {} buyNeeds(); }
+	 */
   if(foodValueRemaining>0){foodValueRemaining--;}
+  if(this.cocaineTimer>0){cocaineTimer--;}
+
   }
+
+public String getIdealogy() {
+	return null;
+}
 
 @Override
 public void travelToDimension(int par1)
@@ -449,7 +558,14 @@ public void readEntityFromNBT(NBTTagCompound tag)
   if(tag.hasKey("command")){playerIssuedCommand = new Command(tag.getCompoundTag("command"));} 
   if(tag.hasKey("townHall")){townHallPosition = new BlockPosition(tag.getCompoundTag("townHall"));}
   if(tag.hasKey("upkeepPos")){upkeepAutoBlock = new BlockPosition(tag.getCompoundTag("upkeepPos"));}
+  if(tag.hasKey("cocaine")){this.cocaineTimer = tag.getInteger("cocaine");}
+
   onWeaponInventoryChanged();
+  //if(tag.hasKey("money")) {money = tag.getDouble("money");}
+  //if(tag.hasKey("mil")) {militancy = tag.getDouble("mil");}
+  //if(tag.hasKey("con")) {consciousness = tag.getDouble("con");}
+  //if(tag.hasKey("literacy")) {literacy = tag.getDouble("literacy");}
+  //if(tag.hasKey("inv")) {InventoryTools.readInventoryFromNBT(inventory, tag.getCompoundTag("inv"));}
   }
 
 @Override
@@ -460,6 +576,12 @@ public void writeEntityToNBT(NBTTagCompound tag)
   if(playerIssuedCommand!=null){tag.setTag("command", playerIssuedCommand.writeToNBT(new NBTTagCompound()));}
   if(townHallPosition!=null){tag.setTag("townHall", townHallPosition.writeToNBT(new NBTTagCompound()));}
   if(upkeepAutoBlock!=null){tag.setTag("upkeepPos", upkeepAutoBlock.writeToNBT(new NBTTagCompound()));}
+  tag.setInteger("cocaine", cocaineTimer);
+  //tag.setDouble("money", this.money);
+  //tag.setDouble("mil", militancy);
+  //tag.setDouble("con", consciousness);
+  //tag.setDouble("literacy", literacy);
+  //tag.setTag("inv", InventoryTools.writeInventoryToNBT(inventory, new NBTTagCompound()));
   }
 
 }

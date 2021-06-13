@@ -32,8 +32,12 @@ import net.shadowmage.ancientwarfare.core.util.AWTextureManager;
 import net.shadowmage.ancientwarfare.npc.ai.NpcAI;
 import net.shadowmage.ancientwarfare.npc.config.AWNPCStatics;
 import net.shadowmage.ancientwarfare.npc.entity.NpcBase;
+import net.shadowmage.ancientwarfare.npc.entity.NpcCombat;
 
 import org.lwjgl.opengl.GL11;
+
+import com.flansmod.client.model.RenderGun;
+import com.flansmod.common.guns.ItemGun;
 
 public class RenderNpcBase extends RenderBiped
 {
@@ -49,10 +53,25 @@ public RenderNpcBase()
 @Override
 public void doRender(Entity par1Entity, double x, double y, double z, float par8, float par9)
   {  
-  super.doRender(par1Entity, x, y, z, par8, par9);
-  EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-
   NpcBase npc = (NpcBase)par1Entity;
+  
+
+  //if(npc.getEquipmentInSlot(0) != null && npc.getEquipmentInSlot(0).getItem() instanceof ItemGun && npc.getCustomNameTag() != "test") {
+		
+		
+	//  this.modelBipedMain.aimedBow=true;
+  //}else if (npc.getCustomNameTag() == "test"){
+	  modelBipedMain.bipedLeftArm.rotateAngleX = -0.4F;
+	  modelBipedMain.bipedRightArm.rotateAngleX = 0;
+	  //modelBipedMain.bipedRightArm.offsetX = 30;
+  //}
+  //this.modelBipedMain.bipedBody.rotateAngleX = 0;
+  super.doRender(par1Entity, x, y, z, par8, par9);
+
+  
+  
+  EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+  
   if(npc.isHostileTowards(player))
     {
     if(AWNPCStatics.renderHostileNames.getBoolean())
@@ -67,7 +86,7 @@ public void doRender(Entity par1Entity, double x, double y, double z, float par8
           name = npcTeam.getColorPrefix()+name+npcTeam.getColorSuffix();
           }
         }
-      renderColoredLabel(npc, name, x, y, z, 64, 0x20ff0000, 0xffff0000);
+      //renderColoredLabel(npc, name, x, y, z, 64, 0x20ff0000, 0xffff0000);
       }      
     }
   else
@@ -89,13 +108,13 @@ public void doRender(Entity par1Entity, double x, double y, double z, float par8
         {
         name = EnumChatFormatting.DARK_GRAY.toString()+name;
         }
-      renderColoredLabel(npc, name, x, y, z, 64, 0x20ffffff, 0xffffffff);
+      if(!(npc instanceof NpcCombat)){renderColoredLabel(npc, name, x, y, z, 64, 0x20ffffff, 0xffffffff);}
       }
     if(canBeCommandedBy)
       {
       if(AWNPCStatics.renderAI.getBoolean())
         {
-        renderNpcAITasks(npc, x, y, z, 64);
+       // renderNpcAITasks(npc, x, y, z, 64);
         }
       }
     }
@@ -112,8 +131,27 @@ protected void func_82420_a(EntityLiving par1EntityLiving, ItemStack par2ItemSta
 @Override
 protected void renderEquippedItems(EntityLiving par1EntityLiving, float par2)
   {
-  super.renderEquippedItems(par1EntityLiving, par2);
+  
+  
   NpcBase npc = (NpcBase)par1EntityLiving;
+  ItemStack gunStack = npc.getHeldItem();
+  if(gunStack != null && gunStack.getItem() instanceof ItemGun) {
+	  ItemGun gun = (ItemGun)gunStack.getItem();
+	  if(npc.renderMode==0) { 
+		 // System.out.println("shoulder");
+		  gun.lockOnSoundDelay = 0;
+	  }else if(npc.renderMode==1) {
+		 // System.out.println("arms");
+		  gun.lockOnSoundDelay=0;
+		
+	  }else if(npc.renderMode==2) {
+		 // System.out.println("arms");
+		  gun.lockOnSoundDelay=0;
+		
+	  }
+  }
+	  
+  super.renderEquippedItems(par1EntityLiving, par2);
   ItemStack itemstack = npc.getShieldStack();  
   Item item;
   
@@ -140,7 +178,7 @@ protected void renderEquippedItems(EntityLiving par1EntityLiving, float par2)
 
     IItemRenderer customRenderer = MinecraftForgeClient.getItemRenderer(itemstack, EQUIPPED);
     boolean is3D = (customRenderer != null && customRenderer.shouldUseRenderHelper(EQUIPPED, itemstack, BLOCK_3D));
-
+    
     if (item instanceof ItemBlock && (is3D || RenderBlocks.renderItemIn3d(Block.getBlockFromItem(item).getRenderType())))
       {
       f1 = 0.5F;

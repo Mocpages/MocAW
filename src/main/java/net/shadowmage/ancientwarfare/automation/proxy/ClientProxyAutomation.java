@@ -11,6 +11,7 @@ import net.shadowmage.ancientwarfare.automation.AncientWarfareAutomation;
 import net.shadowmage.ancientwarfare.automation.block.AWAutomationBlockLoader;
 import net.shadowmage.ancientwarfare.automation.config.AWAutomationStatics;
 import net.shadowmage.ancientwarfare.automation.gui.GuiChunkLoaderDeluxe;
+import net.shadowmage.ancientwarfare.automation.gui.GuiCreativeControls;
 import net.shadowmage.ancientwarfare.automation.gui.GuiMailboxInventory;
 import net.shadowmage.ancientwarfare.automation.gui.GuiTorqueGeneratorSterling;
 import net.shadowmage.ancientwarfare.automation.gui.GuiWarehouseControl;
@@ -92,7 +93,7 @@ public void registerClient()
   NetworkHandler.registerGui(NetworkHandler.GUI_CHUNK_LOADER_DELUXE, GuiChunkLoaderDeluxe.class);  
   NetworkHandler.registerGui(NetworkHandler.GUI_WAREHOUSE_STOCK, GuiWarehouseStockViewer.class);
   NetworkHandler.registerGui(NetworkHandler.GUI_WORKSITE_BOUNDS, GuiWorksiteBoundsAdjust.class);
-    
+  NetworkHandler.registerGui(NetworkHandler.GUI_CREATIVE_CONTROLS, GuiCreativeControls.class);
    
   ClientRegistry.bindTileEntitySpecialRenderer(TileWorksiteBase.class, new RenderTileWorksite());
   ClientRegistry.bindTileEntitySpecialRenderer(TileWarehouseBase.class, new RenderTileWorksite());

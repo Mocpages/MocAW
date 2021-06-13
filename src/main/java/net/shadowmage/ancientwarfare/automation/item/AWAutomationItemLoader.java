@@ -11,14 +11,8 @@ import static net.shadowmage.ancientwarfare.automation.block.AWAutomationBlockLo
 import static net.shadowmage.ancientwarfare.automation.block.AWAutomationBlockLoader.torqueGeneratorWaterwheel;
 import static net.shadowmage.ancientwarfare.automation.block.AWAutomationBlockLoader.warehouseCrafting;
 import static net.shadowmage.ancientwarfare.automation.block.AWAutomationBlockLoader.warehouseInterface;
-import static net.shadowmage.ancientwarfare.automation.block.AWAutomationBlockLoader.worksiteAnimalFarm;
 import static net.shadowmage.ancientwarfare.automation.block.AWAutomationBlockLoader.worksiteAutoCrafting;
-import static net.shadowmage.ancientwarfare.automation.block.AWAutomationBlockLoader.worksiteCropFarm;
-import static net.shadowmage.ancientwarfare.automation.block.AWAutomationBlockLoader.worksiteFishFarm;
-import static net.shadowmage.ancientwarfare.automation.block.AWAutomationBlockLoader.worksiteForestry;
-import static net.shadowmage.ancientwarfare.automation.block.AWAutomationBlockLoader.worksiteMushroomFarm;
 import static net.shadowmage.ancientwarfare.automation.block.AWAutomationBlockLoader.worksiteQuarry;
-import static net.shadowmage.ancientwarfare.automation.block.AWAutomationBlockLoader.worksiteReedFarm;
 import static net.shadowmage.ancientwarfare.automation.block.AWAutomationBlockLoader.worksiteWarehouse;
 
 import java.util.Collections;
@@ -29,6 +23,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.shadowmage.ancientwarfare.automation.block.BlockWorksiteBase;
 import net.shadowmage.ancientwarfare.core.api.AWItems;
 import net.shadowmage.ancientwarfare.core.item.ItemComponent;
 import net.shadowmage.ancientwarfare.core.upgrade.WorksiteUpgrade;
@@ -118,8 +113,7 @@ private int getItemPriority(Item item)
     else if(block==warehouseInterface || block==warehouseCrafting){return 5;}
     else if(block==worksiteWarehouse){return 4;}
     else if(block==worksiteAutoCrafting){return 3;}
-    else if(block==worksiteQuarry || block==worksiteForestry || block==worksiteCropFarm || block==worksiteMushroomFarm
-        || block==worksiteAnimalFarm || block==worksiteReedFarm || block==worksiteFishFarm){return 2;}    
+    else if(block instanceof BlockWorksiteBase){return 2;}    
     }
   return 0;
   }

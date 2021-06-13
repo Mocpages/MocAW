@@ -1,7 +1,6 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 ext.versionFile = file('gradle.properties')
-
 buildscript {
     repositories {
         mavenCentral()
@@ -13,11 +12,17 @@ buildscript {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
+        maven {
+            url = "https://repo1.maven.org/maven2/"
+        }
     }
     dependencies {
+        //classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
     }
 }
+
+
 
 allprojects
 {
@@ -27,12 +32,15 @@ allprojects
     version = "1.7.10-10.13.2.1236"
     runDir = "eclipse/assets"
   }
+
+
   version = project.major +"."+ project.minor +"."+  project.build+"-"+ project.releasetype + "-MC" +minecraft.version
   group = "shadowmage" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
   archivesBaseName = "ancientwarfare"
 }
 
 dependencies {
+  compile fileTree(dir: 'lib', include: ['*.jar'])
   compile files {
     "lib/CodeChickenLib-1.7.10-1.1.1.106-dev.jar"
   }
@@ -47,7 +55,7 @@ dependencies {
   }
   compile files {
     "lib/CoFHLib-[1.7.10]1.0.0B7-dev-29.jar"
-  }  
+  }
 }
 
 task updateVersion(type:Copy){

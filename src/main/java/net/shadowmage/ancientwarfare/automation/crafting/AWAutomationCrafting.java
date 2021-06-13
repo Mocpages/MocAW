@@ -97,41 +97,27 @@ public static void loadRecipes()
       'i', Items.iron_ingot,
       'g', woodenGear.copy());
   
-  AWCraftingManager.INSTANCE.createRecipe(new ItemStack(AWAutomationBlockLoader.worksiteCropFarm), "agriculture", 
-      "___",
-      "gwg",
-      "_c_",
-      '_', Blocks.planks,
-      'w', Items.iron_hoe,
-      'c', Blocks.chest,
-      'g', woodenGear.copy());
-  
-  AWCraftingManager.INSTANCE.createRecipe(new ItemStack(AWAutomationBlockLoader.worksiteReedFarm), "farming", 
-      "___",
-      "gwg",
-      "_c_",
-      '_', Blocks.planks,
-      'w', Items.iron_shovel,
-      'c', Blocks.chest,
-      'g', woodenGear.copy());
-  
-  AWCraftingManager.INSTANCE.createRecipe(new ItemStack(AWAutomationBlockLoader.worksiteMushroomFarm),"farming", 
-      "___",
-      "gwg",
-      "_c_",
-      '_', Blocks.planks,
-      'w', Items.wooden_shovel,
-      'c', Blocks.chest,
-      'g', woodenGear.copy());
-  
-  AWCraftingManager.INSTANCE.createRecipe(new ItemStack(AWAutomationBlockLoader.worksiteAnimalFarm), "animal_husbandry",
-      "___",
-      "gwg",
-      "_c_",
-      '_', Blocks.planks,
-      'w', Items.iron_sword,
-      'c', Blocks.chest,
-      'g', woodenGear.copy());
+		/*
+		 * AWCraftingManager.INSTANCE.createRecipe(new
+		 * ItemStack(AWAutomationBlockLoader.worksiteCropFarm), "agriculture", "___",
+		 * "gwg", "_c_", '_', Blocks.planks, 'w', Items.iron_hoe, 'c', Blocks.chest,
+		 * 'g', woodenGear.copy());
+		 * 
+		 * AWCraftingManager.INSTANCE.createRecipe(new
+		 * ItemStack(AWAutomationBlockLoader.worksiteReedFarm), "farming", "___", "gwg",
+		 * "_c_", '_', Blocks.planks, 'w', Items.iron_shovel, 'c', Blocks.chest, 'g',
+		 * woodenGear.copy());
+		 * 
+		 * AWCraftingManager.INSTANCE.createRecipe(new
+		 * ItemStack(AWAutomationBlockLoader.worksiteMushroomFarm),"farming", "___",
+		 * "gwg", "_c_", '_', Blocks.planks, 'w', Items.wooden_shovel, 'c',
+		 * Blocks.chest, 'g', woodenGear.copy());
+		 * 
+		 * AWCraftingManager.INSTANCE.createRecipe(new
+		 * ItemStack(AWAutomationBlockLoader.worksiteAnimalFarm), "animal_husbandry",
+		 * "___", "gwg", "_c_", '_', Blocks.planks, 'w', Items.iron_sword, 'c',
+		 * Blocks.chest, 'g', woodenGear.copy());
+		 */
   
   AWCraftingManager.INSTANCE.createRecipe(new ItemStack(AWAutomationBlockLoader.worksiteQuarry), "engineering",
       "___",
@@ -142,24 +128,17 @@ public static void loadRecipes()
       'c', Blocks.chest,
       'g', woodenGear.copy());
   
-  AWCraftingManager.INSTANCE.createRecipe(new ItemStack(AWAutomationBlockLoader.worksiteForestry), "farming",
-      "___",
-      "gwg",
-      "_c_",
-      '_', Blocks.planks,
-      'w', Items.iron_axe,
-      'c', Blocks.chest,
-      'g', woodenGear.copy());
-  
-  AWCraftingManager.INSTANCE.createRecipe(new ItemStack(AWAutomationBlockLoader.worksiteFishFarm), "fishing",
-      "___",
-      "gwg",
-      "_c_",
-      '_', Blocks.planks,
-      'w', Items.fishing_rod,
-      'c', Blocks.chest,
-      'g', woodenGear.copy());
-  
+		/*
+		 * AWCraftingManager.INSTANCE.createRecipe(new
+		 * ItemStack(AWAutomationBlockLoader.worksiteForestry), "farming", "___", "gwg",
+		 * "_c_", '_', Blocks.planks, 'w', Items.iron_axe, 'c', Blocks.chest, 'g',
+		 * woodenGear.copy());
+		 * 
+		 * AWCraftingManager.INSTANCE.createRecipe(new
+		 * ItemStack(AWAutomationBlockLoader.worksiteFishFarm), "fishing", "___", "gwg",
+		 * "_c_", '_', Blocks.planks, 'w', Items.fishing_rod, 'c', Blocks.chest, 'g',
+		 * woodenGear.copy());
+		 */
   AWCraftingManager.INSTANCE.createRecipe(new ItemStack(AWAutomationBlockLoader.worksiteWarehouse), "trade",
       "_p_",
       "_c_",

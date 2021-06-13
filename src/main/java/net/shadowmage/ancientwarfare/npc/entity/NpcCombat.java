@@ -1,5 +1,9 @@
 package net.shadowmage.ancientwarfare.npc.entity;
 
+import java.util.ArrayList;
+
+import com.flansmod.common.guns.ItemGun;
+
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -18,6 +22,7 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityAIWatchClosest2;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
@@ -41,6 +46,7 @@ import net.shadowmage.ancientwarfare.npc.ai.owned.NpcAIPlayerOwnedRideHorse;
 import net.shadowmage.ancientwarfare.npc.config.AWNPCStatics;
 import net.shadowmage.ancientwarfare.npc.item.AWNpcItemLoader;
 import net.shadowmage.ancientwarfare.npc.item.ItemCommandBaton;
+import net.shadowmage.ancientwarfare.npc.npc_command.NpcCommand;
 
 public class NpcCombat extends NpcPlayerOwned implements IRangedAttackMob
 {
@@ -48,6 +54,7 @@ public class NpcCombat extends NpcPlayerOwned implements IRangedAttackMob
 private EntityAIBase collideAI;
 private EntityAIBase arrowAI;
 private NpcAIPlayerOwnedPatrol patrolAI;
+public Regiment regiment;
 
 public NpcCombat(World par1World)
   {
@@ -69,19 +76,19 @@ public NpcCombat(World par1World)
   this.tasks.addTask(0, new EntityAIOpenDoor(this, true));
   this.tasks.addTask(0, (horseAI=new NpcAIPlayerOwnedRideHorse(this)));
   this.tasks.addTask(2, new NpcAIFollowPlayer(this));
-  this.tasks.addTask(2, new NpcAIPlayerOwnedFollowCommand(this));
-  this.tasks.addTask(4, new NpcAIPlayerOwnedGetFood(this));
-  this.tasks.addTask(5, new NpcAIPlayerOwnedIdleWhenHungry(this));
+  this.tasks.addTask(3, new NpcAIPlayerOwnedFollowCommand(this));
+  //this.tasks.addTask(4, new NpcAIPlayerOwnedGetFood(this));
+  //this.tasks.addTask(5, new NpcAIPlayerOwnedIdleWhenHungry(this));
   //6--empty....
   //7==combat task, inserted from onweaponinventoryupdated
   this.tasks.addTask(8, new NpcAIMedicBase(this));
   this.tasks.addTask(9, (patrolAI = new NpcAIPlayerOwnedPatrol(this)));
   
-  this.tasks.addTask(10, new NpcAIMoveHome(this, 50.f, 5.f, 20.f, 5.f));
+  //this.tasks.addTask(10, new NpcAIMoveHome(this, 50.f, 5.f, 20.f, 5.f));
   
   //post-100 -- used by delayed shared tasks (look at random stuff, wander)
   this.tasks.addTask(101, new EntityAIWatchClosest2(this, EntityPlayer.class, 3.0F, 1.0F));
-  this.tasks.addTask(102, new NpcAIWander(this, 0.625D));
+ // this.tasks.addTask(102, new NpcAIWander(this, 0.625D));
   this.tasks.addTask(103, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));      
   
   this.targetTasks.addTask(0, new NpcAIPlayerOwnedFindCommander(this));
@@ -96,7 +103,27 @@ protected void applyEntityAttributes()
   this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(AWNPCStatics.npcAttackDamage);
   }
 
+@Override
+public void onLivingUpdate() {
+	super.onLivingUpdate();
+	if(getFollowingEntity() != null) {
+		follow();
+	}
+}
 
+public void follow() {
+		/*
+		 * EntityLivingBase e = getFollowingEntity(); NpcBase f = null; if(e instanceof
+		 * NpcBase) { f= (NpcBase)e; } if(f == null) {return;} double[] goal; goal =
+		 * NpcCommand.getRelOffset(f.posX, f.posZ, angle, xOff, zOff); double dist =
+		 * getDistance(goal[0], posY, goal[1]); //if(dist > 5.0) { return;}
+		 * if(worldObj.getBlock((int)goal[0], (int)f.posY, (int)goal[1]) == Blocks.air
+		 * || worldObj.getBlock((int)goal[0], (int)f.posY, (int)goal[1]) == null) {
+		 * if(worldObj.getBlock((int)goal[0], (int)f.posY-1, (int)goal[1]) !=
+		 * Blocks.air) { setPosition(goal[0], f.posY, goal[1]); }else { int
+		 * y=this.worldObj.getTopSolidOrLiquidBlock((int)goal[0], (int)goal[1]); } }
+		 */
+}
 
 @Override
 public boolean isValidOrdersStack(ItemStack stack)
@@ -114,6 +141,7 @@ public void onOrdersInventoryChanged()
 public void setCurrentItemOrArmor(int par1, ItemStack par2ItemStack)
   {  
   super.setCurrentItemOrArmor(par1, par2ItemStack);
+  //System.out.println("MOC");
   if(par1==0){onWeaponInventoryChanged();}
   }
 
@@ -127,7 +155,7 @@ public void onWeaponInventoryChanged()
     this.tasks.removeTask(collideAI);
     ItemStack stack = getEquipmentInSlot(0);
     Item item = stack==null ? null : stack.getItem();
-    if(item==Items.bow)
+    if(item instanceof ItemGun)
       {
       this.tasks.addTask(7, arrowAI);
       }
@@ -135,6 +163,10 @@ public void onWeaponInventoryChanged()
       {
       this.tasks.addTask(7, collideAI);
       }
+    
+    if(item instanceof ItemCommandBaton) {
+    	new Regiment(stack, this.worldObj, this);
+    }
     }
   }
 
@@ -153,7 +185,7 @@ protected String getSubtypeFromEquipment()
     if(item instanceof ItemSword){return "soldier";}
     else if(item instanceof ItemAxe){return "medic";}
     else if(item instanceof ItemHammer){return "engineer";}
-    else if(item==Items.bow){return "archer";}
+    else if(item instanceof ItemGun){return "archer";}
     else if(item instanceof ItemCommandBaton){return "commander";}
     }
   return "";

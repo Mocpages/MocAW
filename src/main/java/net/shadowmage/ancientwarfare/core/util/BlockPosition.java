@@ -23,6 +23,7 @@
 package net.shadowmage.ancientwarfare.core.util;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 
 public final class BlockPosition
@@ -43,6 +44,12 @@ public BlockPosition(int x, int y, int z)
   this.y = y;
   this.z = z;
   }
+
+public BlockPosition(TileEntity te) {
+	this.x = te.xCoord;
+	this.y = te.yCoord;
+	this.z = te.zCoord;
+}
 
 public BlockPosition(double x, double y, double z)
   {

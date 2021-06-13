@@ -3,6 +3,7 @@ package net.shadowmage.ancientwarfare.npc.ai.owned;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.shadowmage.ancientwarfare.automation.tile.worksite.WorkSiteQuarry;
 import net.shadowmage.ancientwarfare.core.interfaces.IWorkSite;
 import net.shadowmage.ancientwarfare.core.interfaces.IWorker;
 import net.shadowmage.ancientwarfare.core.util.BlockPosition;
@@ -40,13 +41,11 @@ public boolean shouldExecute()
   {  
   if(!npc.getIsAIEnabled()){return false;}
   if(npc.getFoodRemaining()<=0 || npc.shouldBeAtHome()){return false;} 
-  if(!init)
-    {
+  if(!init){
     orderStack = npc.ordersStack;
     order = WorkOrder.getWorkOrder(orderStack);
     init = true;
-    if(order==null || workIndex >= order.getEntries().size())
-      {
+    if(order==null || workIndex >= order.getEntries().size()){
       workIndex=0;
       }
     }
@@ -101,6 +100,7 @@ protected void workAtSite()
   {
   ticksAtSite++;
   if(npc.ticksExisted%10==0){npc.swingItem();}
+  
   if(ticksAtSite>=AWNPCStatics.npcWorkTicks)
     {
     ticksAtSite=0;

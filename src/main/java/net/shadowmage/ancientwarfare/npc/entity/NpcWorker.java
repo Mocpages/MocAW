@@ -33,6 +33,7 @@ import net.shadowmage.ancientwarfare.npc.ai.owned.NpcAIPlayerOwnedGetFood;
 import net.shadowmage.ancientwarfare.npc.ai.owned.NpcAIPlayerOwnedIdleWhenHungry;
 import net.shadowmage.ancientwarfare.npc.ai.owned.NpcAIPlayerOwnedRideHorse;
 import net.shadowmage.ancientwarfare.npc.ai.owned.NpcAIPlayerOwnedWork;
+import net.shadowmage.ancientwarfare.npc.ai.owned.NpcAIPlayerOwnedWorkArea;
 import net.shadowmage.ancientwarfare.npc.ai.owned.NpcAIPlayerOwnedWorkRandom;
 import net.shadowmage.ancientwarfare.npc.item.AWNpcItemLoader;
 
@@ -56,6 +57,8 @@ public NpcWorker(World par1World)
   this.tasks.addTask(4, new NpcAIPlayerOwnedGetFood(this));  
   this.tasks.addTask(5, new NpcAIPlayerOwnedIdleWhenHungry(this)); 
   this.tasks.addTask(6, (workAI = new NpcAIPlayerOwnedWork(this)));
+  this.tasks.addTask(6, ( new NpcAIPlayerOwnedWorkArea(this)));
+
   this.tasks.addTask(7, (workRandomAI = new NpcAIPlayerOwnedWorkRandom(this)));
   this.tasks.addTask(8, new NpcAIMoveHome(this, 50.f, 3.f, 30.f, 3.f));
   
@@ -88,6 +91,33 @@ public String getNpcSubType()
   return "";  
   }
   }
+
+//@Override
+//public String getIdealogy() {
+		/*
+		 * String output = "";
+		 * 
+		 * float conservative = 1.0F; float reactionary=1.0F; float socdem=1.0F; float
+		 * communist=1.0F; float liberal=1.0F; float anarchist=1.0F;
+		 * 
+		 * boolean farmer = getWorkTypeFromEquipment() == WorkType.FARMING; if(farmer) {
+		 * conservative=5.0F; liberal=1.1F; }
+		 * 
+		 * //Modify for conservative if(this.consciousness < 4 && this.militancy < 5) {
+		 * int mult = 5-(int)militancy; conservative *= (mult/10.0F); }
+		 * 
+		 * //Modify for reactionary float multiplier = 0.0F; if(this.consciousness < 4
+		 * && this.militancy >= 5) { multiplier += (militancy-5.0F)/10.0F;
+		 * 
+		 * } if(farmer && consciousness < 6) { multiplier += 0.1F * militancy; }else if
+		 * (consciousness < 4) { multiplier += 0.25F * militancy; }
+		 * 
+		 * 
+		 * return output;
+		 */
+//}
+
+
 
 public void handleWorksiteBroadcast(IWorkSite site, BlockPosition pos)
   {
@@ -177,6 +207,7 @@ protected WorkType getWorkTypeFromEquipment()
 @Override
 public void onOrdersInventoryChanged()
   {
+	
   this.workAI.onOrdersChanged();
   }
 

@@ -35,7 +35,7 @@ private Random rng = new Random();
 
 private final String skinMainPath = AWCoreStatics.configPathForFiles+"npc/skins/";
 private final String defaultSkinPack = "/assets/ancientwarfare/skin_pack/default_skin_pack.zip";
-
+ 
 public ResourceLocation getTextureFor(NpcBase npc)
   { 
   ResourceLocation loc = null;

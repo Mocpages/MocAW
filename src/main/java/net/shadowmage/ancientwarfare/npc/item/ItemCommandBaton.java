@@ -27,6 +27,7 @@ import net.shadowmage.ancientwarfare.core.interfaces.IItemKeyInterface;
 import net.shadowmage.ancientwarfare.core.util.RayTraceUtils;
 import net.shadowmage.ancientwarfare.core.util.WorldTools;
 import net.shadowmage.ancientwarfare.npc.entity.NpcBase;
+import net.shadowmage.ancientwarfare.npc.entity.NpcCombat;
 import net.shadowmage.ancientwarfare.npc.entity.NpcPlayerOwned;
 import net.shadowmage.ancientwarfare.npc.npc_command.NpcCommand;
 import net.shadowmage.ancientwarfare.npc.npc_command.NpcCommand.CommandType;
@@ -185,6 +186,7 @@ public void onRightClick(EntityPlayer player, ItemStack stack)
       NpcPlayerOwned npc = (NpcPlayerOwned)pos.entityHit;
       if(npc.canBeCommandedBy(player.getCommandSenderName()))
         {      
+    	
         onNpcClicked(player, (NpcPlayerOwned) pos.entityHit, player.getHeldItem());        
         }
       }
@@ -255,6 +257,14 @@ public boolean onKeyActionClient(EntityPlayer player, ItemStack stack, ItemKey k
 private void onNpcClicked(EntityPlayer player, NpcBase npc, ItemStack stack)
   {
   if(player==null || npc==null || stack==null || stack.getItem()!=this){return;}
+  if(npc instanceof NpcCombat) {
+	 NpcCombat combat = (NpcCombat)npc;
+	 if(this!= AWNpcItemLoader.commandBatonDiamond) {
+		  if(combat.getNpcSubType() != "commander") {
+			  npc = combat.regiment.commander;
+		  }
+  	  }
+  }
   CommandSet set = new CommandSet();
   set.loadFromStack(stack);
   set.onNpcClicked(npc);
@@ -262,12 +272,12 @@ private void onNpcClicked(EntityPlayer player, NpcBase npc, ItemStack stack)
   set.writeToStack(stack);
   }
 
-public static void getCommandedEntities(World world, ItemStack stack, List<Entity> entities)
+public static void getCommandedEntities(World world, ItemStack stack, List<NpcBase> targets)
   {
-  if(world==null || stack==null || entities==null || !(stack.getItem() instanceof ItemCommandBaton)){return;}
+  if(world==null || stack==null || targets==null || !(stack.getItem() instanceof ItemCommandBaton)){return;}
   CommandSet set = new CommandSet();
   set.loadFromStack(stack);
-  set.getEntities(world, entities);
+  set.getEntities(world, targets);
   }
 
 /**
@@ -330,13 +340,13 @@ public void onNpcClicked(NpcBase npc)
     }
   }
 
-public void getEntities(World world, List<Entity> in)
+public void getEntities(World world, List<NpcBase> targets)
   {
   Entity e;
   for(UUID id : ids)
     {
     e = WorldTools.getEntityByUUID(world, id.getMostSignificantBits(), id.getLeastSignificantBits());
-    if(e!=null){in.add(e);}
+    if(e!=null){targets.add((NpcBase) e);}
     }
   }
 

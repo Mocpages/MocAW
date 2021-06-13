@@ -25,6 +25,7 @@ public NpcFaction(World par1World)
   super(par1World);  
   String type = this.getNpcFullType();
   ItemStack eqs;
+  
   for(int i = 0; i < 8; i++)
     {
     eqs = AncientWarfareNPC.statics.getStartingEquipmentForSlot(type, i);

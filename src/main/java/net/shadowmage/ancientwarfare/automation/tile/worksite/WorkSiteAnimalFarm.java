@@ -26,6 +26,7 @@ import net.shadowmage.ancientwarfare.core.network.NetworkHandler;
 import net.shadowmage.ancientwarfare.core.upgrade.WorksiteUpgrade;
 import net.shadowmage.ancientwarfare.core.util.BlockPosition;
 import net.shadowmage.ancientwarfare.core.util.InventoryTools;
+import net.shadowmage.ancientwarfare.npc.entity.NpcPlayerOwned;
 
 public class WorkSiteAnimalFarm extends TileWorksiteBoundedInventory
 {
@@ -43,6 +44,7 @@ private int bucketCount;
 private int carrotCount;
 private int seedCount;
 private ItemStack shears = null;
+public ArrayList<NpcPlayerOwned> workers = new ArrayList<NpcPlayerOwned>();
 
 private List<EntityPair> pigsToBreed = new ArrayList<EntityPair>();
 private List<EntityPair> chickensToBreed = new ArrayList<EntityPair>();
@@ -51,6 +53,7 @@ private List<Integer> cowsToMilk = new ArrayList<Integer>();
 private List<EntityPair> sheepToBreed = new ArrayList<EntityPair>();
 private List<Integer> sheepToShear = new ArrayList<Integer>();
 private List<Integer> entitiesToCull = new ArrayList<Integer>();
+public FactoryRecipe r;
 
 public WorkSiteAnimalFarm()
   {
@@ -126,21 +129,60 @@ protected boolean hasWorksiteWork()
   return hasAnimalWork();
   }
 
+public void setRecipe() {
+	ArrayList<FactoryRecipe> recipes = FactoryRecipe.getAllRecipes();
+	if(recipes.size() > 0) {
+		r = recipes.get(0);
+	}
+}
+
+public boolean hasInputs() {
+	for(int i = 0; i < 27; i++) {
+		ItemStack stack = r.input.getStackInSlot(i);
+		if(stack != null) {
+		//	System.out.println("MOCC: " + stack.getDisplayName());
+			if(InventoryTools.getCountOf(inventory, 1, stack) < InventoryTools.getCountOf(r.input, -1, stack)) {
+			//	System.out.println(" aaa " + stack.getDisplayName());
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+public void removeInputs() {
+	for(int i = 0; i < 27; i++) {
+		ItemStack stack = r.input.getStackInSlot(i);
+		if(stack != null) {
+			int quantity = InventoryTools.getCountOf(r.input, -1, stack);
+			InventoryTools.removeItems(inventory, 1, stack, stack.stackSize);
+		}
+	}
+}
+
+public void addOutputs() {
+	for(int i = 0; i < 27; i++) {
+		ItemStack stack = r.output.getStackInSlot(i);
+		if(stack != null) {
+			//System.out.println("Yeet");
+			InventoryTools.mergeItemStack(inventory, stack.copy(), 1);
+			//InventoryTools.removeItems(inventory, 0, stack, quantity);
+		}
+	}
+}
+
 @Override
-protected void updateWorksite()
-  {
-  worldObj.theProfiler.startSection("Count Resources");  
-  if(shouldCountResources){countResources();}
-  worldObj.theProfiler.endStartSection("Animal Rescan");
-  workerRescanDelay--;
-  if(workerRescanDelay<=0){rescan();}
-  worldObj.theProfiler.endStartSection("EggPickup");
-  if(worldObj.getWorldTime()%20==0)
-    {
-    pickupEggs();
-    }
-  worldObj.theProfiler.endSection();
-  }
+public void updateEntity(){
+	if(r == null) {
+		setRecipe();
+	}
+	if(this.worldObj.getWorldTime() % 1200 == 0) {
+		if(r != null && hasInputs()) {
+			removeInputs();
+			addOutputs();
+		}
+	}
+}
 
 private void countResources()
   {
@@ -524,6 +566,7 @@ public void readFromNBT(NBTTagCompound tag)
   if(tag.hasKey("maxCows")){maxCowCount = tag.getInteger("maxCows");}
   if(tag.hasKey("maxPigs")){maxPigCount = tag.getInteger("maxPigs");}
   if(tag.hasKey("maxSheep")){maxSheepCount = tag.getInteger("maxSheep");}
+  r.readFromNBT(tag);
   }
 
 @Override
@@ -534,6 +577,7 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setInteger("maxCows", maxCowCount);
   tag.setInteger("maxPigs", maxPigCount);
   tag.setInteger("maxSheep", maxSheepCount);
+  r.writeToNBT(tag);
   }
 
 private static class EntityPair
@@ -563,6 +607,12 @@ public Entity getEntityB(World world)
   {
   return world.getEntityByID(idB);
   }
+}
+
+@Override
+protected void updateWorksite() {
+	// TODO Auto-generated method stub
+	
 }
 
 }

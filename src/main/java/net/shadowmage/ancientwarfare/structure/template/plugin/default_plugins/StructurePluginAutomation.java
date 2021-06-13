@@ -40,12 +40,20 @@ public StructurePluginAutomation()
 @Override
 public void addHandledBlocks(IStructurePluginManager manager)
   {
-  manager.registerBlockHandler("awWorksite", AWAutomationBlockLoader.worksiteCropFarm, TemplateRuleWorksite.class);
-  manager.registerBlockHandler("awWorksite", AWAutomationBlockLoader.worksiteAnimalFarm, TemplateRuleWorksite.class);
-  manager.registerBlockHandler("awWorksite", AWAutomationBlockLoader.worksiteFishFarm, TemplateRuleWorksite.class);
-  manager.registerBlockHandler("awWorksite", AWAutomationBlockLoader.worksiteForestry, TemplateRuleWorksite.class);
-  manager.registerBlockHandler("awWorksite", AWAutomationBlockLoader.worksiteMushroomFarm, TemplateRuleWorksite.class);
-  manager.registerBlockHandler("awWorksite", AWAutomationBlockLoader.worksiteReedFarm, TemplateRuleWorksite.class);
+		/*
+		 * manager.registerBlockHandler("awWorksite",
+		 * AWAutomationBlockLoader.worksiteCropFarm, TemplateRuleWorksite.class);
+		 * manager.registerBlockHandler("awWorksite",
+		 * AWAutomationBlockLoader.worksiteAnimalFarm, TemplateRuleWorksite.class);
+		 * manager.registerBlockHandler("awWorksite",
+		 * AWAutomationBlockLoader.worksiteFishFarm, TemplateRuleWorksite.class);
+		 * manager.registerBlockHandler("awWorksite",
+		 * AWAutomationBlockLoader.worksiteForestry, TemplateRuleWorksite.class);
+		 * manager.registerBlockHandler("awWorksite",
+		 * AWAutomationBlockLoader.worksiteMushroomFarm, TemplateRuleWorksite.class);
+		 * manager.registerBlockHandler("awWorksite",
+		 * AWAutomationBlockLoader.worksiteReedFarm, TemplateRuleWorksite.class);
+		 */
   manager.registerBlockHandler("awWorksite", AWAutomationBlockLoader.worksiteQuarry, TemplateRuleWorksite.class);
   manager.registerBlockHandler("awWorksite", AWAutomationBlockLoader.worksiteWarehouse, TemplateRuleWorksite.class);
   
