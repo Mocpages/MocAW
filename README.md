@@ -1,26 +1,9 @@
 AncientWarfare2
 ===============
-In order to develop on this project you will need to:  
-Download the repository into a local folder.  
-Locate this folder, run gradle_update.bat  
-This should download all dependencies and setup proper .classpath  
-Import the project into eclipse from the downloaded folder/repository.  
-At this point it should be completely setup to begin development.  
-  
-This is a rewrite of Ancient Warfare mod for Minecraft for Minecraft versions 1.7.x +  
-Most features have been rewritten. Mod has been modularized -- can use individual modules independent of the others.  
-  
-Modules initially available will be:
-* Core (mandatory for all sub-modules)  
-* Automation -- adds quarries, automated farms, tree-farms, etc.  
-* NPCs -- adds workers, combat npcs.  complete faction-based npc system for world-gen.  
-* Structures -- the AW template system, packaged as a stand-alone.  Has dynamically loaded plugins to handle interaction with other AW modules.  
-  
-  
-Initial Releases will not have any Vehicles module -- that will be coming later in the development cycle.
-  
-  
-  
+Original project: https://github.com/P3pp3rF1y/AncientWarfare2/tree/master  
+This is a customized version of AW2 1.7.10, specifically for my Minecraft server. It involves various changes, currently including a customized factions claim system, and NPCs  among other things. It's also linked to a bunch of other mods that my server uses; check the libraries folder for more information. I strongly recommend against pulling this directly for personal use, because it involves a lot of semitested changes and quirks unique to my server - for example, it **will** crash your game if you don't have Hardcore Darkness installed and enabled. If you want to use some of these features, feel free to pull specific functions or clases. You can make an issue asking for a customized version but I can't promise to actually do it, as I have a lot on my plate at the moment. 
+===============
+
 Ancient Warfare 2.x - A mod for Minecraft
 Copyright (C) 2013-2015  Shadowmage
   
