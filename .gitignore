@@ -8,3 +8,5 @@
 /.classpath
 /.metadata
 /.idea
+.project
+gradle.properties

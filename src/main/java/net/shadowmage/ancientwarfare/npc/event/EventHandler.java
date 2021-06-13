@@ -9,6 +9,7 @@ import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
@@ -143,6 +144,11 @@ public class EventHandler
 	  RenderTools.adjustBBForPlayerPos(bb, player, delta);
 	  RenderTools.drawOutlinedBoundingBox(bb, 1.f, 1.f, 1.f);
 	  }
+	  @SubscribeEvent
+      public static void onPlayerTick(TickEvent.PlayerTickEvent e){
+		EntityPlayer p = e.player;
+		
+	  };
 	
 	private void renderBoundingBox(EntityPlayer player, BlockPosition min, BlockPosition max, float delta, float r, float g, float b)
 	  {
