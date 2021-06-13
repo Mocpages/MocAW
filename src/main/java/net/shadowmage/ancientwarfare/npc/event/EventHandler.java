@@ -157,18 +157,16 @@ public class EventHandler
 			for(MocFaction f : data.factions) {
 				if(f.prisoners.contains(p.getDisplayName())) {
 					if(f.prison != null) {
-						p.addChatComponentMessage(new ChatComponentText("Yeet"));
-						p.posX = f.prison.x;
-						p.posY = f.prison.y;
-						p.posZ = f.prison.z;
+						//p.addChatComponentMessage(new ChatComponentText("Yeet"));
+						p.setPositionAndUpdate(f.prison.x, f.prison.y, f.prison.z);
+
 					}
 				}
 			}
 		}
 	}
 	
-	private void renderBoundingBox(EntityPlayer player, BlockPosition min, BlockPosition max, float delta, float r, float g, float b)
-	  {
+	private void renderBoundingBox(EntityPlayer player, BlockPosition min, BlockPosition max, float delta, float r, float g, float b) {
 	  AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x+1, max.y+1, max.z+1);
 	  RenderTools.adjustBBForPlayerPos(bb, player, delta);
 	  RenderTools.drawOutlinedBoundingBox(bb, r, g, b);
