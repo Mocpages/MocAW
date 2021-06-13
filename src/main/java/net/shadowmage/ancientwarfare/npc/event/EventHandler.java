@@ -151,12 +151,12 @@ public class EventHandler
 	@SubscribeEvent
 	public void onPlayerTick(TickEvent.PlayerTickEvent e){
 		EntityPlayer p = e.player;
-		
 		if(!p.worldObj.isRemote) {
 			MocData data = AWGameData.INSTANCE.getData(MocData.name,p.getEntityWorld(), MocData.class);
 			for(MocFaction f : data.factions) {
 				if(f.prisoners.contains(p.getDisplayName())) {
-					if(f.prison != null) {
+					if(f.prison != null && !p.getEntityData().getBoolean("isPrisoner")) {
+						p.getEntityData().setBoolean("isPrisoner", true);
 						//p.addChatComponentMessage(new ChatComponentText("Yeet"));
 						p.setPositionAndUpdate(f.prison.x, f.prison.y, f.prison.z);
 
