@@ -1,7 +1,7 @@
 AncientWarfare2
 ===============
 Original project: https://github.com/P3pp3rF1y/AncientWarfare2/tree/master  
-This is a customized version of AW2 1.7.10, specifically for my Minecraft server. It involves various changes, currently including a customized factions claim system, and NPCs  among other things. It's also linked to a bunch of other mods that my server uses; check the libraries folder for more information. I strongly recommend against pulling this directly for personal use, because it involves a lot of semitested changes and quirks unique to my server - for example, it **will** crash your game if you don't have Hardcore Darkness installed and enabled. If you want to use some of these features, feel free to pull specific functions or clases. You can make an issue asking for a customized version but I can't promise to actually do it, as I have a lot on my plate at the moment. 
+This is a customized version of AW2 1.7.10, specifically for my Minecraft server. It involves various changes, currently including a customized factions claim system, and NPCs flying MCHeli planes, among other things. It's also linked to a bunch of other mods that my server uses; check the libraries folder for more information. I strongly recommend against pulling this directly for personal use, because it involves a lot of semitested changes and quirks unique to my server - for example, it **will** crash your game if you don't have Hardcore Darkness installed and enabled. If you want to use some of these features, feel free to pull specific functions or clases. You can make an issue asking for a customized version but I can't promise to actually do it, as I have a lot on my plate at the moment. 
 ===============
 
 Ancient Warfare 2.x - A mod for Minecraft
