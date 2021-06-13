@@ -149,7 +149,7 @@ public class EventHandler
 	  
 	
 	@SubscribeEvent
-	public static void onPlayerTick(TickEvent.PlayerTickEvent e){
+	public void onPlayerTick(TickEvent.PlayerTickEvent e){
 		EntityPlayer p = e.player;
 		
 		if(!p.worldObj.isRemote) {
