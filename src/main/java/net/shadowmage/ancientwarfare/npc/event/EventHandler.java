@@ -158,7 +158,9 @@ public class EventHandler
 				if(f.prisoners.contains(p.getDisplayName())) {
 					if(f.prison != null) {
 						p.addChatComponentMessage(new ChatComponentText("Yeet"));
-						p.setPosition(f.prison.x, f.prison.y, f.prison.z);
+						p.posX = f.prison.x;
+						p.posY = f.prison.y;
+						p.posZ = f.prison.z;
 					}
 				}
 			}
