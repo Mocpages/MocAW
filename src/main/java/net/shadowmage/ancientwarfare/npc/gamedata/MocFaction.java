@@ -2,6 +2,7 @@ package net.shadowmage.ancientwarfare.npc.gamedata;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -40,7 +41,9 @@ public class MocFaction {
 	
 	public Bank nationalBank = new Bank();
 	public Market itemMarket = new Market(nationalBank);
-	
+
+	List<String> enemiesInWar = new ArrayList<String>();
+
 	public static double INTEREST_RATE = 0.01;
 	
 	public MocFaction(String n) {
@@ -204,5 +207,11 @@ public class MocFaction {
 			  }
 		  }
 
+	}
+	public boolean isAtWar(MocFaction other){
+		if (this.enemiesInWar.contains(other.name)){
+			return true;
+		}
+		return false;
 	}
 }
