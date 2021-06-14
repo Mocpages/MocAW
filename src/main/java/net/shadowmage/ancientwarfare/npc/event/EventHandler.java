@@ -456,7 +456,7 @@ public class EventHandler
 	
 	@SubscribeEvent
 	public void tooltipEvent(ItemTooltipEvent evt) {
-		evt.toolTip.add("�cMoc, �fplease fucking �1die");
+		//evt.toolTip.add("�cMoc, �fplease fucking �1die");
 	}
 	
 	@SubscribeEvent
@@ -467,44 +467,26 @@ public class EventHandler
 			if(server!=null && server.getEntityWorld()!=null){
 				//world dimension 0 = overworld
 				//dim 100 = lotr ME
-				//MocData data = ((MocData)AWGameData.INSTANCE.getPerWorldData(MocData.name,server.worldServerForDimension(100), MocData.class));
-				MocData data2 = ((MocData)AWGameData.INSTANCE.getPerWorldData(MocData.name,server.worldServerForDimension(0), MocData.class));
+				MocData data = ((MocData)AWGameData.INSTANCE.getPerWorldData(MocData.name,server.worldServerForDimension(100), MocData.class));
+				data.onTick(server.getEntityWorld());
 
-				data2.onTick(server.getEntityWorld());
-
-				//data.onTick(server.getEntityWorld());
 				updateStamina(server.getEntityWorld());
 
-				for(Object o : server.getConfigurationManager().playerEntityList) {
-					if(o instanceof EntityPlayerMP) {
-						EntityPlayerMP player = (EntityPlayerMP)o;
-						for(EntityShip ship : ShipLocator.getShips(player.worldObj)) {
-							if(ship.getCollider().isEntityAboard(player)) { //The stolen plans are on board this vessel
-								if(player.getHeldItem() == null) {return;}
-								if(player.getHeldItem().getItem() == Items.wooden_sword) { //Fire director item
-									//ship.worldObj.getEntitiesWithinAABB(MCH_EntityVehicle.class, ship.getBoundingBox())
-									for(Entity e : ship.getCollider().getRiders()) {
-										if(e instanceof MCH_EntityVehicle) {
-											//print(player, "Turret found");
-											MCH_EntityVehicle turret = (MCH_EntityVehicle)e;
-											//turret.isUsedPlayer=true;
-											//turret.rotationPitch = player.rotationPitch;
-
-											//turret.rotationYaw=player.rotationYaw;
-											//turret.lastRiderPitch = player.rotationPitch;
-											//turret.lastRiderYaw = player.rotationYaw;
-										}else {
-											//	print(player, "Name: " + e.getCommandSenderName());
-										}
-									}
-								}
-							}
-						}
-						
-						if(player.ridingEntity instanceof EntityHorse) {
-							handleRiding(player);
+				ArrayList<World> worlds = new ArrayList<World>();
+				for(Object o : server.getConfigurationManager().playerEntityList){
+					if(o instanceof EntityPlayer){
+						EntityPlayer player = (EntityPlayer)o;
+						if(!worlds.contains(player.getEntityWorld())){
+							worlds.add(player.getEntityWorld());
 						}
 					}
+				}
+
+				for(World w : worlds){
+					MocData data2 = ((MocData)AWGameData.INSTANCE.getPerWorldData(MocData.name,w, MocData.class));
+				//	data2.onTick(w);
+
+
 				}
 			}
 		}

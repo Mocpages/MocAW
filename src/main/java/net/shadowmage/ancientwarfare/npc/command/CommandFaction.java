@@ -113,6 +113,7 @@ public void joinFaction(ICommandSender var1, String[] var2, MocData data) {
 	}else {
 		printError(var1, "You are not invited to this faction.");
 	}
+	data.markDirty();
 }
 
 @SuppressWarnings("unchecked")

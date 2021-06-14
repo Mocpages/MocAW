@@ -82,14 +82,14 @@ public class MocFaction {
 	
 	public void readFromNBT(NBTTagCompound tag) {
 		name = tag.getString("name");
-		//System.out.println("yeet: " + name);
+		System.out.println("yeet: " + name);/*
 		this.poor_income_tax = tag.getFloat("pit");
 		this.middle_income_tax = tag.getFloat("mit");
 		this.rich_income_tax = tag.getFloat("hit");
 		this.import_tariff = tag.getFloat("it");
 		this.export_tariff = tag.getFloat("et");
 		this.treasury = tag.getFloat("tr");
-		this.educationSpending = tag.getFloat("ed");
+		this.educationSpending = tag.getFloat("ed");*/
 		//this.avgLit = tag.getDouble("avLit");
 		if(tag.hasKey("updated")) { this.lastUpdate = tag.getInteger("updated");}
 		if(tag.hasKey("bank")) {nationalBank = new Bank(tag.getCompoundTag("bank"));}
@@ -98,27 +98,27 @@ public class MocFaction {
 		for(int i = 0; i < playerList.tagCount(); i++) {
 			players.add(playerList.getCompoundTagAt(i).getString("name"));
 		}
-		if(tag.hasKey("prison")) { prison = new BlockPosition(tag.getCompoundTag("prison"));}
+		//if(tag.hasKey("prison")) { prison = new BlockPosition(tag.getCompoundTag("prison"));}
 	}
 
 	
 	public void writeToNBT(NBTTagCompound tag) {
-		//System.out.println("writing: " + name + " " + poor_income_tax);
+		//System.out.println("writing: " + name);
 		tag.setString("name", name);
-		tag.setFloat("pit", poor_income_tax);
-		tag.setFloat("mit", middle_income_tax);
-		tag.setFloat("hit", rich_income_tax);
-		tag.setFloat("it", import_tariff);
-		tag.setFloat("et", export_tariff);
-		tag.setFloat("tr", treasury);
-		tag.setFloat("ed", educationSpending);
+		//tag.setFloat("pit", poor_income_tax);
+		//tag.setFloat("mit", middle_income_tax);
+		//tag.setFloat("hit", rich_income_tax);
+		//tag.setFloat("it", import_tariff);
+		//tag.setFloat("et", export_tariff);
+		//tag.setFloat("tr", treasury);
+		//tag.setFloat("ed", educationSpending);
 		//tag.setDouble("avLit", this.getAvLit());
 		tag.setInteger("updated", this.lastUpdate);
 		tag.setInteger("influence", influence);
 		
-		NBTTagCompound bank = new NBTTagCompound();
-		nationalBank.writeToNBT(bank);
-		tag.setTag("bank", bank);
+		//NBTTagCompound bank = new NBTTagCompound();
+		//nationalBank.writeToNBT(bank);
+		//tag.setTag("bank", bank);
 		
 		  NBTTagList playerList = new NBTTagList();
 		  NBTTagCompound playerTag;  
@@ -128,7 +128,9 @@ public class MocFaction {
 			  playerList.appendTag(playerTag);
 		  }
 		  tag.setTag("playerList", playerList);
-		  tag.setTag("prison", prison.writeToNBT(new NBTTagCompound()));
+		  if(prison != null) {
+			  tag.setTag("prison", prison.writeToNBT(new NBTTagCompound()));
+		  }
 	}
 	
 	public double getAvLit() {

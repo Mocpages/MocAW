@@ -119,8 +119,9 @@ public class MocData extends WorldSavedData{
 	
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
-	//	System.out.println("reading from NBT");
+		System.out.println("reading from NBT");
 		NBTTagList facList = tag.getTagList("facList", Constants.NBT.TAG_COMPOUND);
+		System.out.println("# of facs: " + facList.tagCount());
 		for(int i = 0; i < facList.tagCount(); i++) {
 			factions.add(new MocFaction(facList.getCompoundTagAt(i)));
 		}
@@ -134,12 +135,15 @@ public class MocData extends WorldSavedData{
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 	//	System.out.println("writing to nbt");
+
 		  NBTTagList facList = new NBTTagList();
-		  NBTTagCompound facTag;  
+		  NBTTagCompound facTag;
+		  System.out.println("Writing " + factions.size() + " factions");
 		  for(MocFaction f : factions) {
 			  facTag = new NBTTagCompound();
 			  f.writeToNBT(facTag);
 			  facList.appendTag(facTag);
+			  System.out.println("Wrote " + f.name + "!");
 		  }
 		  tag.setTag("facList", facList);
 		  
@@ -164,12 +168,14 @@ public class MocData extends WorldSavedData{
 	public void onTick(World w) {
 	//	System.out.println("remote: " + w.isRemote);
 	//	System.out.println("UK Exists: " + getFaction("UnitedKingdom").name);
-		//System.out.println("Ticking");
+		System.out.println("Ticking");
 		for(MocFaction f : this.factions) {
 			f.onTick(w);
+
 		}
 		initStates();
 		updateStates(w);
+		this.markDirty();
 	}
 	
 	public Squad getSquad(EntityPlayer p) {
