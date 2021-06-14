@@ -42,7 +42,7 @@ public class MocFaction {
 	public Bank nationalBank = new Bank();
 	public Market itemMarket = new Market(nationalBank);
 
-	List<String> enemiesInWar = new ArrayList<String>();
+	//List<String> enemiesInWar = new ArrayList<String>();
 
 	public static double INTEREST_RATE = 0.01;
 	
@@ -207,11 +207,5 @@ public class MocFaction {
 			  }
 		  }
 
-	}
-	public boolean isAtWar(MocFaction other){
-		if (this.enemiesInWar.contains(other.name)){
-			return true;
-		}
-		return false;
 	}
 }
