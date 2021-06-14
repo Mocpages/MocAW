@@ -157,12 +157,11 @@ public class EventHandler
 		if(!p.worldObj.isRemote) {
 			MocData data = AWGameData.INSTANCE.getData(MocData.name,p.getEntityWorld(), MocData.class);
 			for(MocFaction f : data.factions) {
-				if(f.prisoners.contains(p.getDisplayName())) {
+				if(f.prisoners.contains(p.getCommandSenderName())) {
 					if(f.prison != null && !p.getEntityData().getBoolean("isPrisoner")) {
 						p.getEntityData().setBoolean("isPrisoner", true);
 						p.addChatComponentMessage(new ChatComponentText("You have been imprisoned!"));
 						p.setPositionAndUpdate(f.prison.x, f.prison.y, f.prison.z);
-
 					}
 				}
 			}

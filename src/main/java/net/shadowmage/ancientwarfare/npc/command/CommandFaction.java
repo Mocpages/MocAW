@@ -190,6 +190,9 @@ public void processCommand(ICommandSender var1, String[] var2) {
 			}else {
 				print(var1, "Imprisoning.", EnumChatFormatting.GREEN);
 				fac.prisoners.add(target.getCommandSenderName());
+				target.getEntityData().setBoolean("isPrisoner", false);
+
+
 				data.setDirty(true);
 			}
 		}
