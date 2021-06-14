@@ -93,6 +93,8 @@ public class MocData extends WorldSavedData{
 	public boolean addFaction(String name) {
 		if(this.getFaction(name) == null) {
 			factions.add(new MocFaction(name));
+			//Claim the faction land and using lotr map and link it into that MocFaction??
+			//@Moc
 			markDirty();
 			return true;
 		}else {
