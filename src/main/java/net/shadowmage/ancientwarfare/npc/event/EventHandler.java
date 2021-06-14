@@ -44,14 +44,17 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.item.ItemEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
 import net.shadowmage.ancientwarfare.core.gamedata.AWGameData;
@@ -72,6 +75,7 @@ import squeek.applecore.api.plants.PlantGrowthEvent;
 
 public class EventHandler
 {
+	//file:///C:/Users/witix/Desktop/forgeevents.html
 	private EventHandler(){}
 	public static final EventHandler INSTANCE = new EventHandler();
 	private Gui gui = new Gui();
@@ -146,8 +150,7 @@ public class EventHandler
 	  RenderTools.adjustBBForPlayerPos(bb, player, delta);
 	  RenderTools.drawOutlinedBoundingBox(bb, 1.f, 1.f, 1.f);
 	  }
-	  
-	
+
 	@SubscribeEvent
 	public void onPlayerTick(TickEvent.PlayerTickEvent e){
 		EntityPlayer p = e.player;
@@ -509,7 +512,10 @@ public class EventHandler
 		EntityPlayer player = event.getPlayer();
 		if(player.worldObj.isRemote) {return;}
 		if(player.capabilities.isCreativeMode) {return;}
-
+		if (player.getEntityData().getBoolean("isPrisoner")){
+			player.addChatComponentMessage(new ChatComponentText("Can't break blocks in prison"));
+			event.setCanceled(true);
+		}
 		for(TileTownHall th : getTHInRange(player, 100)) {
 			if(th.inBattle()) {
 				if(event.block.getUnlocalizedName().contains("sandbag")){return;}//Can break sandbags in battle to avoid fuckery
@@ -537,7 +543,10 @@ public class EventHandler
 		EntityPlayer player = event.player;
 		if(player.worldObj.isRemote) {return;}
 		if(player.capabilities.isCreativeMode) {return;}
-
+		if (player.getEntityData().getBoolean("isPrisoner")){
+			player.addChatComponentMessage(new ChatComponentText("Can't place blocks in prison"));
+			event.setCanceled(true);
+		}
 		for(TileTownHall th : getTHInRange(player, 100)) {
 			if(th.inBattle()) {
 				if(event.block.getUnlocalizedName().contains("sandbag")) {
@@ -566,7 +575,10 @@ public class EventHandler
 		EntityPlayer player = event.entityPlayer;
 		if(player.worldObj.isRemote) {return;}
 		if(player.capabilities.isCreativeMode) {return;}
-
+		if (player.getEntityData().getBoolean("isPrisoner")){
+			player.addChatComponentMessage(new ChatComponentText("Can't interact with blocks in prison"));
+			event.setCanceled(true);
+		}
 		for(TileTownHall th : getTHInRange(player, 100)) {
 
 			if(!th.isOnSameTeam(player) && !th.inBattle()) {
@@ -577,6 +589,7 @@ public class EventHandler
 
 
 	}
+
 
 	private FontRenderer fontRenderer;
 	private int color = 0xFFFFFF;
