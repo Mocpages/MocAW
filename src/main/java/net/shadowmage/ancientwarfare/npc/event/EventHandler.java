@@ -16,6 +16,9 @@ import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 import cuchaz.ships.EntityShip;
 import cuchaz.ships.ShipLocator;
 import lumien.hardcoredarkness.HardcoreDarkness;
+import mcheli.MCH_Camera;
+import mcheli.MCH_Lib;
+import mcheli.MCH_ViewEntityDummy;
 import mcheli.aircraft.MCH_ItemAircraft;
 import mcheli.tool.MCH_ItemWrench;
 import mcheli.vehicle.MCH_EntityVehicle;
@@ -65,9 +68,11 @@ import net.shadowmage.ancientwarfare.core.util.InventoryTools;
 import net.shadowmage.ancientwarfare.core.util.RenderTools;
 import net.shadowmage.ancientwarfare.npc.AncientWarfareNPC;
 import net.shadowmage.ancientwarfare.npc.entity.NpcBase;
+import net.shadowmage.ancientwarfare.npc.entity.NpcPlayerOwned;
 import net.shadowmage.ancientwarfare.npc.gamedata.MocData;
 import net.shadowmage.ancientwarfare.npc.gamedata.MocFaction;
 import net.shadowmage.ancientwarfare.npc.item.AWNpcItemLoader;
+import net.shadowmage.ancientwarfare.npc.item.ItemBrainWorm;
 import net.shadowmage.ancientwarfare.npc.item.ItemBuildingSettings;
 import net.shadowmage.ancientwarfare.npc.tile.TileTownHall;
 import net.shadowmage.ancientwarfare.structure.template.build.StructureBB;
@@ -317,6 +322,19 @@ public class EventHandler
 		if(HardcoreDarkness.INSTANCE.getActiveConfig().isDimensionBlacklisted(0)) {
 			throw new Exception("HCD must not black list overworld.");
 		}
+
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		double range = 5;
+		if(player == null){return;}
+		if((player.getHeldItem() == null || !(player.getHeldItem().getItem() instanceof ItemBrainWorm))){
+			if(player.getEntityData().getBoolean("isViewNpc")){
+				//System.out.println("agh");
+				MCH_Lib.setRenderViewEntity(player);
+			}else{
+
+			}
+		}
+//		MCH_Lib.setRenderViewEntity(player);
 
 	}
 

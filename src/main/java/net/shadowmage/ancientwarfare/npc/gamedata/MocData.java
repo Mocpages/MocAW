@@ -33,7 +33,7 @@ public class MocData extends WorldSavedData{
 	}
 	
 	public void forceInit() {
-		System.out.println("init states");
+		//System.out.println("init states");
 		states.add(new State(1, "Salamgard", new ItemStack(Item.getItemFromBlock(Blocks.iron_ore))));
 		markDirty();
 	}
@@ -168,7 +168,7 @@ public class MocData extends WorldSavedData{
 	public void onTick(World w) {
 	//	System.out.println("remote: " + w.isRemote);
 	//	System.out.println("UK Exists: " + getFaction("UnitedKingdom").name);
-		System.out.println("Ticking");
+	//	System.out.println("Ticking");
 		for(MocFaction f : this.factions) {
 			f.onTick(w);
 

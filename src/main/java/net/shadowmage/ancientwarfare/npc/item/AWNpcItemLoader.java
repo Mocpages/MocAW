@@ -59,6 +59,7 @@ public static final ItemPapers papers = new ItemPapers("papers");
 public static final ItemCocaine cocaine = new ItemCocaine("cocaine");
 public static final ItemMoney money = new ItemMoney("money");
 public static final ItemRadio radio = new ItemRadio("radio");
+public static final ItemBrainWorm brainworm = new ItemBrainWorm("brainworm");
 
 
 
@@ -74,6 +75,7 @@ public static void load(){
 	GameRegistry.registerItem(cocaine, "cocaine");
 	GameRegistry.registerItem(money, "money");
 	GameRegistry.registerItem(radio, "radio");
+    GameRegistry.registerItem(brainworm, "brainworm");
 
 	
   GameRegistry.registerItem(npcSpawner, "npc_spawner");  
