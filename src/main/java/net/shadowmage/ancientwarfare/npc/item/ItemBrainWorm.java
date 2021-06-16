@@ -121,17 +121,16 @@ public class ItemBrainWorm extends Item{
                         MCH_ViewEntityDummy.getInstance(player.worldObj).update(camera);
                         MCH_Lib.setRenderViewEntity(MCH_ViewEntityDummy.getInstance(player.worldObj));
                         player.getEntityData().setBoolean("isViewNpc", true);
+
+                        //  player.addChatComponentMessage(new ChatComponentText("e"));
                     } else{
-                        MCH_Lib.setRenderViewEntity(player);
                     }
                 }
             }
 
 
         }else {
-            if(world.isRemote){
-                MCH_Lib.setRenderViewEntity(Minecraft.getMinecraft().thePlayer);
-            }
+
             stack.setItemDamage(0);
         }
     }

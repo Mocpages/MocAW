@@ -329,8 +329,14 @@ public class EventHandler
 		if((player.getHeldItem() == null || !(player.getHeldItem().getItem() instanceof ItemBrainWorm))){
 			if(player.getEntityData().getBoolean("isViewNpc")){
 				//System.out.println("agh");
+
+				player.getEntityData().setBoolean("isViewNpc", false);
 				MCH_Lib.setRenderViewEntity(player);
+
+				//player.addChatComponentMessage(new ChatComponentText("b"));
+
 			}else{
+				//player.addChatComponentMessage(new ChatComponentText("test: " + player.getEntityData().getBoolean("isViewNpc")));
 
 			}
 		}
