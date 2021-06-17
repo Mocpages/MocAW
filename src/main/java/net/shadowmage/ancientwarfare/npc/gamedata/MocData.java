@@ -204,7 +204,7 @@ public class MocData extends WorldSavedData{
 		return true;
 	}
 
-	public MocFaction getFaction(EntityPlayerMP player) {
+	public MocFaction getFaction(EntityPlayer player) {
 		for(MocFaction f : factions) {
 			if(f.players.contains(player.getCommandSenderName())) {
 				return f;
