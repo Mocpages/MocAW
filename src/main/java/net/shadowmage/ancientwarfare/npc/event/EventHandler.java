@@ -15,11 +15,17 @@ import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 import cuchaz.ships.EntityShip;
 import cuchaz.ships.ShipLocator;
+import lotr.common.entity.LOTRMobSpawnerCondition;
+import lotr.common.entity.LOTRRandomSkinEntity;
+import lotr.common.entity.animal.LOTRAmbientCreature;
+import lotr.common.entity.npc.LOTREntityNPC;
+import lotr.common.entity.npc.LOTRNPCMount;
 import lumien.hardcoredarkness.HardcoreDarkness;
 import mcheli.MCH_Camera;
 import mcheli.MCH_Lib;
 import mcheli.MCH_ViewEntityDummy;
 import mcheli.aircraft.MCH_ItemAircraft;
+import mcheli.parachute.MCH_EntityParachute;
 import mcheli.tool.MCH_ItemWrench;
 import mcheli.vehicle.MCH_EntityVehicle;
 import net.minecraft.block.Block;
@@ -54,6 +60,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -170,7 +177,22 @@ public class EventHandler
 					}
 				}
 			}
+
+			if(p.fallDistance > 6){
+				if(p.ridingEntity == null){
+					//spawnParachute(p);
+				}
+			}
 		}
+	}
+
+
+	public void spawnParachute(EntityPlayer player){
+		MCH_EntityParachute parachute = new MCH_EntityParachute(player.worldObj, player.posX, player.posY, player.posZ);
+		parachute.user = player;
+		parachute.rotationYaw = 0;
+		parachute.setType(3);
+		player.worldObj.spawnEntityInWorld(parachute);
 	}
 	
 	private void renderBoundingBox(EntityPlayer player, BlockPosition min, BlockPosition max, float delta, float r, float g, float b) {
