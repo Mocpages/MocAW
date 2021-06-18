@@ -103,7 +103,29 @@ public class MocData extends WorldSavedData{
 	///	System.out.println("adding fac");
 		
 	}
-	
+
+	public MocFaction getChunkOwner(int x, int z){
+		for(MocFaction f : factions){
+			for(Base b : f.bases){
+				if(b.isChunkClaimed(x / 16, z / 16)){return f;}
+			}
+		}
+		return null;
+	}
+
+	public boolean isChunkClaimed(int x, int z){
+		return getChunkOwner(x,z) != null;
+	}
+
+	public Base getBase(int x, int z){
+		for(MocFaction f : factions){
+			for(Base b : f.bases){
+				if(b.isChunkClaimed(x / 16, z / 16)){return b;}
+			}
+		}
+		return null;
+	}
+
 	public MocFaction getFaction(String name) {
 	//	System.out.println("Getting data for " + name);
 		for(MocFaction fac : factions) {
@@ -112,7 +134,6 @@ public class MocData extends WorldSavedData{
 				return fac;
 			}
 		}
-		
 		return null;
 	}
 	
@@ -207,6 +228,15 @@ public class MocData extends WorldSavedData{
 	public MocFaction getFaction(EntityPlayer player) {
 		for(MocFaction f : factions) {
 			if(f.players.contains(player.getCommandSenderName())) {
+				return f;
+			}
+		}
+		return null;
+	}
+
+	public MocFaction getFacByPlayerName(String player) {
+		for(MocFaction f : factions) {
+			if(f.players.contains(player)) {
 				return f;
 			}
 		}

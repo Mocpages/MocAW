@@ -36,7 +36,8 @@ public class MocFaction {
 
 	public BlockPosition prison = null;
 	public ArrayList<String> prisoners = new ArrayList<String>();
-	
+	public ArrayList<Base> bases = new ArrayList<Base>();
+
 	public int influence = 0;
 	
 	public Bank nationalBank = new Bank();
@@ -78,6 +79,15 @@ public class MocFaction {
 			npcs.add(p);
 		}
 	}
+
+	public Base getBase(String name){
+		for(Base b : bases){
+			if(b.name.equalsIgnoreCase(name)){
+				return b;
+			}
+		}
+		return null;
+	}
 	
 	public MocFaction(NBTTagCompound tag) {
 		readFromNBT(tag);
@@ -101,12 +111,19 @@ public class MocFaction {
 		for(int i = 0; i < playerList.tagCount(); i++) {
 			players.add(playerList.getCompoundTagAt(i).getString("name"));
 		}
+
+		NBTTagList baseList = tag.getTagList("baseList", Constants.NBT.TAG_COMPOUND);
+		System.out.println("Reading from NBT. Bases: " + baseList.tagCount());
+		for(int i = 0; i < baseList.tagCount(); i++) {
+			bases.add(new Base(baseList.getCompoundTagAt(i)));
+		}
+
 		//if(tag.hasKey("prison")) { prison = new BlockPosition(tag.getCompoundTag("prison"));}
 	}
 
 	
 	public void writeToNBT(NBTTagCompound tag) {
-		//System.out.println("writing: " + name);
+		System.out.println("writing fac: " + name);
 		tag.setString("name", name);
 		//tag.setFloat("pit", poor_income_tax);
 		//tag.setFloat("mit", middle_income_tax);
@@ -131,6 +148,17 @@ public class MocFaction {
 			  playerList.appendTag(playerTag);
 		  }
 		  tag.setTag("playerList", playerList);
+
+		NBTTagList baseList = new NBTTagList();
+		NBTTagCompound baseTag;
+		for(Base b : bases) {
+			baseTag = new NBTTagCompound();
+			b.writeToNBT(baseTag);
+			baseList.appendTag(baseTag);
+		}
+		System.out.println("Writing to NBT " + baseList.tagCount());
+		tag.setTag("baseList", baseList);
+
 		  if(prison != null) {
 			  tag.setTag("prison", prison.writeToNBT(new NBTTagCompound()));
 		  }

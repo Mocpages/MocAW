@@ -31,6 +31,7 @@ import net.shadowmage.ancientwarfare.core.gamedata.WorldData;
 import net.shadowmage.ancientwarfare.core.network.NetworkHandler;
 import net.shadowmage.ancientwarfare.core.network.PacketBase;
 import net.shadowmage.ancientwarfare.npc.block.AWNPCBlockLoader;
+import net.shadowmage.ancientwarfare.npc.command.CommandBase;
 import net.shadowmage.ancientwarfare.npc.command.CommandDebugAI;
 import net.shadowmage.ancientwarfare.npc.command.CommandFaction;
 import net.shadowmage.ancientwarfare.npc.command.CommandSquad;
@@ -199,6 +200,7 @@ public void serverStart(FMLServerStartingEvent evt)
   evt.registerServerCommand(new CommandFaction());  
   evt.registerServerCommand(new CommandDebugAI());
   evt.registerServerCommand(new CommandSquad());
+    evt.registerServerCommand(new CommandBase());
 
   }
 

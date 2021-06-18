@@ -76,6 +76,7 @@ import net.shadowmage.ancientwarfare.core.util.RenderTools;
 import net.shadowmage.ancientwarfare.npc.AncientWarfareNPC;
 import net.shadowmage.ancientwarfare.npc.entity.NpcBase;
 import net.shadowmage.ancientwarfare.npc.entity.NpcPlayerOwned;
+import net.shadowmage.ancientwarfare.npc.gamedata.Base;
 import net.shadowmage.ancientwarfare.npc.gamedata.MocData;
 import net.shadowmage.ancientwarfare.npc.gamedata.MocFaction;
 import net.shadowmage.ancientwarfare.npc.item.AWNpcItemLoader;
@@ -552,6 +553,12 @@ public class EventHandler
 
 	//}
 
+	public Base getBase(World w, double x, double z){
+		MocData data =  AWGameData.INSTANCE.getData(MocData.name,w, MocData.class);
+		return data.getBase((int)x, (int)z);
+	}
+
+
 	@SubscribeEvent
 	public void onBlockBreakEvent(BreakEvent event) {
 		EntityPlayer player = event.getPlayer();
@@ -561,14 +568,16 @@ public class EventHandler
 			player.addChatComponentMessage(new ChatComponentText("Can't break blocks in prison"));
 			event.setCanceled(true);
 		}
-		for(TileTownHall th : getTHInRange(player, 100)) {
-			if(th.inBattle()) {
-				if(event.block.getUnlocalizedName().contains("sandbag")){return;}//Can break sandbags in battle to avoid fuckery
+
+		Base b = getBase(player.getEntityWorld(), player.posX, player.posZ);
+		if(b == null){
+			return; //Players can break blocks in wilderness.
+		}else{
+			if(b.canPlayerAccess(player)) {
+				return; //Player may access areas in their own bases
+			}else{
 				event.setCanceled(true);
-				print(player, "[" + th.name + "]: Cannot break blocks in battle, except sandbags.", EnumChatFormatting.RED);
-			}else if(!th.isOnSameTeam(player)) {
-				event.setCanceled(true);
-				print(player, "[" + th.name + "]: Cannot break blocks in another faction's base.", EnumChatFormatting.RED);
+				print(player, "[" + b.name + "]: Cannot break blocks in battle, except sandbags.", EnumChatFormatting.RED);
 			}
 		}
 	}
@@ -592,25 +601,16 @@ public class EventHandler
 			player.addChatComponentMessage(new ChatComponentText("Can't place blocks in prison"));
 			event.setCanceled(true);
 		}
-		for(TileTownHall th : getTHInRange(player, 100)) {
-			if(th.inBattle()) {
-				if(event.block.getUnlocalizedName().contains("sandbag")) {
-					Block b = player.worldObj.getBlock(event.x, event.y-1, event.z); //Sandbags cannot be placed on top of other sandbags during battle, so get the block under the one that is being placede
-					if(b==null) {return;} //If it's air then we're good. Avoid null except.
-					if(b.getUnlocalizedName().contains("sandbag")) {
-						event.setCanceled(true);
-						print(player, "[" + th.name + "]: Cannot place a sandbag on top of another sandbag.", EnumChatFormatting.RED);
-					}else {
-						return; //This is a sandbag being placed in battle, not on top of another sandbag. A-OK!
-					}
-				}else {
-					event.setCanceled(true);
-					print(player, "[" + th.name + "]: Only sandbags may be placed during battle.", EnumChatFormatting.RED);
-				}
 
-			}else if(!th.isOnSameTeam(player)) {
+		Base b = getBase(player.getEntityWorld(), player.posX, player.posZ);
+		if(b == null){
+			return; //Players can break blocks in wilderness.
+		}else{
+			if(b.canPlayerAccess(player)) {
+				return; //Player may access areas in their own bases
+			}else{
 				event.setCanceled(true);
-				print(player, "[" + th.name + "]: Cannot place blocks in another faction's base.", EnumChatFormatting.RED);
+				print(player, "[" + b.name + "]: Cannot break blocks in battle, except sandbags.", EnumChatFormatting.RED);
 			}
 		}
 	}
@@ -624,15 +624,18 @@ public class EventHandler
 			player.addChatComponentMessage(new ChatComponentText("Can't interact with blocks in prison"));
 			event.setCanceled(true);
 		}
-		for(TileTownHall th : getTHInRange(player, 100)) {
 
-			if(!th.isOnSameTeam(player) && !th.inBattle()) {
+		Base b = getBase(player.getEntityWorld(), player.posX, player.posZ);
+		if(b == null){
+			return; //Players can break blocks in wilderness.
+		}else{
+			if(b.canPlayerAccess(player)) {
+				return; //Player may access areas in their own bases
+			}else{
 				event.setCanceled(true);
-				print(player, "[" + th.name + "]: Cannot interact with blocks in another faction's base except during battle.", EnumChatFormatting.RED);
+				print(player, "[" + b.name + "]: Cannot break blocks in battle, except sandbags.", EnumChatFormatting.RED);
 			}
 		}
-
-
 	}
 
 
