@@ -119,7 +119,7 @@ public class NpcAIFactionRangedAttack extends NpcAI
 		}
 		
 		boolean aiming = false;
-		if(Math.abs(pitchToTgt-npc.rotationPitch)<=1 && Math.abs(yawToTgt - npc.rotationYaw)<=1) {
+		if(Math.abs(pitchToTgt-npc.rotationPitch)<=2 && Math.abs(yawToTgt - npc.rotationYaw)<=2) {
 			aiming = true;
 		}
 		System.out.println("Updating. Aiming " + aiming + " dist " + dist + " cansee " + canSee + " shoot time " + shootTime);

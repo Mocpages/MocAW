@@ -3,10 +3,12 @@ package net.shadowmage.ancientwarfare.npc.command;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.shadowmage.ancientwarfare.core.gamedata.AWGameData;
 import net.shadowmage.ancientwarfare.npc.gamedata.Base;
+import net.shadowmage.ancientwarfare.npc.gamedata.Battle;
 import net.shadowmage.ancientwarfare.npc.gamedata.MocData;
 import net.shadowmage.ancientwarfare.npc.gamedata.MocFaction;
 
@@ -40,7 +42,7 @@ public class CommandBase  implements ICommand {
     public void processCommand(ICommandSender sender, String[] args) {
         if(!(sender instanceof EntityPlayer)){return;}
         EntityPlayer player = (EntityPlayer)sender;
-        MocData data = AWGameData.INSTANCE.getData(MocData.name,player.getEntityWorld(), MocData.class);
+        MocData data = AWGameData.INSTANCE.getData(MocData.name, MinecraftServer.getServer().worldServerForDimension(100), MocData.class);
         MocFaction fac = data.getFaction(player);
         if(fac == null){
             print(player, "Error: you are not in a faction!", EnumChatFormatting.RED);
@@ -65,7 +67,18 @@ public class CommandBase  implements ICommand {
                 print(player, "Error: Chunk is not adjacent!", EnumChatFormatting.RED);
             }
 
+        }else if (args[0].equalsIgnoreCase("attack")){
+            Base b = data.getBase(args[1]);
+            if(b == null){
+                print(player, "Error: No base with name " + args[1] +".", EnumChatFormatting.RED);
+                return;
+            }
+            Battle battle = new Battle(player.worldObj, b);
+            b.battle = battle;
+            print(player, "Attack declared.", EnumChatFormatting.GREEN);
+
         }
+        data.markDirty();
     }
 
     @Override

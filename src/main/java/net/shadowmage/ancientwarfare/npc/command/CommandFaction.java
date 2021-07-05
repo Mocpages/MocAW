@@ -18,6 +18,7 @@ import net.shadowmage.ancientwarfare.core.gamedata.AWGameData;
 import net.shadowmage.ancientwarfare.core.util.BlockPosition;
 import net.shadowmage.ancientwarfare.npc.config.AWNPCStatics;
 import net.shadowmage.ancientwarfare.npc.faction.FactionTracker;
+import net.shadowmage.ancientwarfare.npc.gamedata.Base;
 import net.shadowmage.ancientwarfare.npc.gamedata.MocData;
 import net.shadowmage.ancientwarfare.npc.gamedata.MocFaction;
 import net.shadowmage.ancientwarfare.npc.gamedata.State;
@@ -121,7 +122,7 @@ public void joinFaction(ICommandSender var1, String[] var2, MocData data) {
 public void processCommand(ICommandSender var1, String[] var2) {
 	String cmd = var2[0];
 	String playerName;
-	MocData data = AWGameData.INSTANCE.getData(MocData.name,var1.getEntityWorld(), MocData.class);
+	MocData data = AWGameData.INSTANCE.getData(MocData.name, MinecraftServer.getServer().worldServerForDimension(100), MocData.class);
 	if(cmd.equalsIgnoreCase("adminattack") && var1.getCommandSenderName().equalsIgnoreCase("mocpages")) {
 		playerName  = var2[1];
 		TileTownHall.attackBaseAdmin(playerName, var1.getEntityWorld());
@@ -204,12 +205,9 @@ public void processCommand(ICommandSender var1, String[] var2) {
 			if(f.name.equalsIgnoreCase(playerName)) {
 				var1.addChatMessage(new ChatComponentText(f.name));
 
-				var1.addChatMessage(new ChatComponentText("   Treasury: " + f.treasury));
-				var1.addChatMessage(new ChatComponentText("   Debt: " + f.poor_income_tax));
-				var1.addChatMessage(new ChatComponentText("   Influence: " + f.influence));
 				var1.addChatMessage(new ChatComponentText("   Bases: "));
-				for(TileTownHall th : getTHs(f.name, var1.getEntityWorld())) {
-					var1.addChatMessage(new ChatComponentText("      " + th.name + ": x" + th.xCoord + " y" + th.yCoord + " z" + th.zCoord  ));
+				for(Base b : f.bases) {
+					var1.addChatMessage(new ChatComponentText("      " + b.name));
 				}
 				
 				var1.addChatMessage(new ChatComponentText("   Players: "));

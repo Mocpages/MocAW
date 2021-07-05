@@ -16,6 +16,8 @@ public class Base {
     public String owner;
     public ArrayList<String> members = new ArrayList<String>();
     public BlockPosition spawn;
+    public Battle battle = null;
+
 
     public Base(String n, String o){
         name = n;
@@ -26,6 +28,14 @@ public class Base {
     public Base(NBTTagCompound tag) {
         readFromNBT(tag);
     }
+
+    public void update(){
+        System.out.println("Base ticking");
+        if(battle != null){
+            battle.onUpdate();
+        }
+    }
+
 
     public void claimChunk(double x, double z){
         ChunkCoordIntPair coords = new ChunkCoordIntPair((int)x / 16, (int)z / 16);

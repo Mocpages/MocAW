@@ -126,6 +126,15 @@ public class MocData extends WorldSavedData{
 		return null;
 	}
 
+	public Base getBase(String name){
+		for(MocFaction f : factions){
+			for(Base b : f.bases){
+				if(b.name.equalsIgnoreCase(name)){return b;}
+			}
+		}
+		return null;
+	}
+
 	public MocFaction getFaction(String name) {
 	//	System.out.println("Getting data for " + name);
 		for(MocFaction fac : factions) {
@@ -189,7 +198,7 @@ public class MocData extends WorldSavedData{
 	public void onTick(World w) {
 	//	System.out.println("remote: " + w.isRemote);
 	//	System.out.println("UK Exists: " + getFaction("UnitedKingdom").name);
-	//	System.out.println("Ticking");
+		System.out.println("Ticking; factions " + factions.size());
 		for(MocFaction f : this.factions) {
 			f.onTick(w);
 

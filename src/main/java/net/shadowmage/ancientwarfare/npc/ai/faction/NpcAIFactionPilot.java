@@ -87,6 +87,8 @@ public class NpcAIFactionPilot extends NpcAI
 		if(aircraft != null) {
 			try {
 				if(target.xCoord != 0 || target.zCoord != 0) {
+					aircraft.getAcInfo().speed=1.0f;
+
 					updateAircraft();
 				}
 				

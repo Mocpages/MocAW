@@ -517,7 +517,7 @@ public class EventHandler
 				//world dimension 0 = overworld
 				//dim 100 = lotr ME
 				MocData data = ((MocData)AWGameData.INSTANCE.getPerWorldData(MocData.name,server.worldServerForDimension(100), MocData.class));
-				data.onTick(server.getEntityWorld());
+				data.onTick(server.worldServerForDimension(100));
 
 				updateStamina(server.getEntityWorld());
 

@@ -214,6 +214,11 @@ public class MocFaction {
 	
 	public void onTick(World w) {
 	//	updateDebt();
+
+		  for(Base b : bases){
+		  	b.update();
+		  }
+
 		  System.out.println("Remote: " + w.isRemote);
 		  System.out.println("Name: " + this.name);
 		  System.out.println("prisoners: " + this.prisoners.size());
