@@ -13,6 +13,8 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import mcheli.weapon.MCH_EntityBullet;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -107,6 +109,10 @@ public void preInit(FMLPreInitializationEvent evt)
   FMLCommonHandler.instance().bus().register(FactionTracker.INSTANCE);
   FMLCommonHandler.instance().bus().register(this);
   MinecraftForge.EVENT_BUS.register(net.shadowmage.ancientwarfare.npc.event.EventHandler.INSTANCE);
+  if (evt.getSide() == Side.CLIENT) {
+    MinecraftForge.EVENT_BUS.register(net.shadowmage.ancientwarfare.npc.event.ClientEvent.INSTANCE);
+  }
+
   FMLCommonHandler.instance().bus().register(net.shadowmage.ancientwarfare.npc.event.EventHandler.INSTANCE);
   /**
    * load items, blocks, and entities

@@ -91,67 +91,7 @@ public class EventHandler
 	//file:///C:/Users/witix/Desktop/forgeevents.html
 	private EventHandler(){}
 	public static final EventHandler INSTANCE = new EventHandler();
-	private Gui gui = new Gui();
 
-	@SubscribeEvent
-	public void handleRenderLastEvent(RenderWorldLastEvent evt) {
-		Minecraft mc = Minecraft.getMinecraft();
-		if(mc==null){
-			return;
-		}
-
-		EntityPlayer player = mc.thePlayer;
-		if(player==null){
-			return;
-		}
-
-		ItemStack stack = player.inventory.getCurrentItem();
-
-		Item item;
-		if(stack==null || (item=stack.getItem())==null){
-			return;
-		}
-		if(item==AWNpcItemLoader.scanner){
-			renderScannerBoundingBox(player, stack, evt.partialTicks);
-		}
-	}
-	
-	
-	StructureBB bb = new StructureBB(new BlockPosition(), new BlockPosition()){};
-	ItemBuildingSettings settings = new ItemBuildingSettings();
-	
-	private void renderScannerBoundingBox(EntityPlayer player, ItemStack stack, float delta){
-	  ItemBuildingSettings.getSettingsFor(stack, settings);
-	  BlockPosition pos1, pos2, min, max;
-	  if(settings.hasPos1()){
-	    pos1 = settings.pos1();
-	    }
-	  else{
-	    pos1 = BlockTools.getBlockClickedOn(player, player.worldObj, player.isSneaking());
-	    }
-	  if(settings.hasPos2()){
-	    pos2 = settings.pos2();
-	    }
-	  else{
-	    pos2 = BlockTools.getBlockClickedOn(player, player.worldObj, player.isSneaking());
-	    }
-	  if(pos1!=null && pos2!=null){
-		    min = BlockTools.getMin(pos1, pos2);
-		    max = BlockTools.getMax(pos1, pos2);
-		    if(settings.isContained(player.worldObj)) {
-			    renderBoundingBox(player, min, max, delta, 0, 1.f, 0);
-		    }else {
-			    renderBoundingBox(player, min, max, delta, 1.f, 0, 0);
-		    }
-		    Minecraft mc = Minecraft.getMinecraft();
-		    ScaledResolution sr = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
-		    int x = sr.getScaledWidth()-10;
-		    //String header = "Floor space: " + settings.getLivingSpace(player.worldObj);
-		    //gui.drawString(mc.fontRenderer, header, x-mc.fontRenderer.getStringWidth(header), 0, 0xffffffff);
-
-	    }
-	  }
-	
 	@SubscribeEvent
     public void onCropGrowthAppleCore(PlantGrowthEvent.AllowGrowthTick event){
         event.setResult(Event.Result.DENY);
@@ -252,10 +192,6 @@ public class EventHandler
 		}
 	}
 
-	@SubscribeEvent
-	public void onPlayerDrop(PlayerDropsEvent event) {
-
-	}
 
 	public TileTownHall getClosestFriendlyTH(EntityPlayer player, double closeDist) {
 		TileTownHall closest = null;
@@ -332,40 +268,7 @@ public class EventHandler
 	}
 
 
-	@SubscribeEvent
-	public void clientTick(ClientTickEvent evt) throws Exception {
-		try {
-			if(Minecraft.getMinecraft().thePlayer.getActivePotionEffect(Potion.nightVision).getDuration() >0 && Minecraft.getMinecraft().gameSettings.hideGUI) {
-				Minecraft.getMinecraft().gameSettings.hideGUI = false;
-			}
-		}catch(Exception e) {}
-		if(HardcoreDarkness.INSTANCE.getActiveConfig().getMode() != 2) {
-			throw new Exception("HCD must have mode 2.");
-		}
-		if(HardcoreDarkness.INSTANCE.getActiveConfig().isDimensionBlacklisted(0)) {
-			throw new Exception("HCD must not black list overworld.");
-		}
 
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		double range = 5;
-		if(player == null){return;}
-		if((player.getHeldItem() == null || !(player.getHeldItem().getItem() instanceof ItemBrainWorm))){
-			if(player.getEntityData().getBoolean("isViewNpc")){
-				//System.out.println("agh");
-
-				player.getEntityData().setBoolean("isViewNpc", false);
-				MCH_Lib.setRenderViewEntity(player);
-
-				//player.addChatComponentMessage(new ChatComponentText("b"));
-
-			}else{
-				//player.addChatComponentMessage(new ChatComponentText("test: " + player.getEntityData().getBoolean("isViewNpc")));
-
-			}
-		}
-//		MCH_Lib.setRenderViewEntity(player);
-
-	}
 
 	public void updateWeight(MinecraftServer server) {
 		for(Object o : server.getConfigurationManager().playerEntityList) {
@@ -644,21 +547,7 @@ public class EventHandler
 	private static final int red = 0xEB1717;
 	private static final int green = 0x22EB17;
 
-	private void verifyRenderer() {
-		if (fontRenderer != null) return;
-		Minecraft minecraft = Minecraft.getMinecraft();
-		fontRenderer = minecraft.fontRenderer;
-	}
 
-	@SubscribeEvent
-	public void render(RenderGameOverlayEvent.Post event) {
-
-		//EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		//Mw.instance.markerManager.addMarker("TEST", "group", (int)player.posX, 100, (int)player.posZ, 0, red);
-		//Mw.instance.markerManager.setVisibleGroupName("group");
-		//Mw.instance.markerManager.update();
-		//Mw.instance.markerManager.selectNextMarker();
-	}
 
 	/*
 	 * @SubscribeEvent public void onPlayerOpenContainer(PlayerOpenContainerEvent

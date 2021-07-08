@@ -39,6 +39,7 @@ public class ItemBrainWorm extends Item{
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister reg){
         //open = reg.registerIcon("ancientwarfare:npc/papers_open");
      //   closed = reg.registerIcon("ancientwarfare:npc/papers_closed");
